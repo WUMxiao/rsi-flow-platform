@@ -1,5 +1,5 @@
-'use client';
 import React, { useEffect, useMemo, useRef } from 'react';
+import { Button } from 'antd';
 import styles from './index.module.css';
 import type { LoginProps } from './types';
 
@@ -86,6 +86,16 @@ const LoginPage: React.FC<LoginProps> = () => {
 
   return (
     <>
+      <div
+        className={styles.div}
+      >
+        <Button
+          className={styles.divButton0}
+          type="primary"
+        >
+          {`运行`}
+        </Button>
+      </div>
       <VisualDiagram
         // className={styles.divDiv0}
         ref={diagramRef}
