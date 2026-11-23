@@ -13,9 +13,12 @@ import {
 } from '@horsecoder/visual-core';
 import StandardModelEntityWrapper from '@/components/StandardModelEntity/wrapper';
 import StandardModelLinkWrapper from '@/components/StandardModelLink/wrapper';
-import { refreshCanvasLocked, refreshElementLocked, setView } from './handler/handler/diagramHandler';
+import { getView, refreshCanvasLocked, refreshElementLocked, setView } from './handler/handler/diagramHandler';
 
 import { first_test } from './test/first_test';
+import { user_favorites_test } from './test/user_favorites_test';
+import { flowRun } from '@/src/flows/com.horsecoder.common.whuTalent.flowTesting.core/Run';
+import { user_excel_test } from './test/user_excel_test';
 
 
 /**
@@ -33,8 +36,7 @@ const LoginPage: React.FC<LoginProps> = () => {
   useEffect(() => {
     if (diagramRef.current) {
       refreshCanvasLocked(diagramRef, false);
-      setView(diagramRef, first_test);
-      // refreshElementLocked()
+      setView(diagramRef, user_excel_test);
     };
   }, [])
 
@@ -90,6 +92,9 @@ const LoginPage: React.FC<LoginProps> = () => {
         <Button
           className={styles.divButton0}
           type="primary"
+          onClick={()=>{
+            flowRun({structure: JSON.stringify(getView(diagramRef))})
+          }}
         >
           {`运行`}
         </Button>
