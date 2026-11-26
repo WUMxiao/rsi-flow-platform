@@ -4,6 +4,7 @@ import flowPkg from '@horsecoder/flow';
 
 import { planStep } from './steps/plan.ts';
 import { readStep } from './steps/read.ts';
+import { verifyStep } from './steps/verify.ts';
 
 const { stop } = flowPkg as unknown as {
   stop: (flowId: string, args: Record<string, unknown>) => Promise<unknown>;
@@ -42,12 +43,19 @@ export const NODES: Record<string, NodeFn> = {
     return out as unknown as Record<string, unknown>;
   },
 
-  // S5 会换成：契约核验 + 证据逐字匹配 + 内部重试
+  // 契约核验 + 证据比对 + 内部重试（规则优先，模型兜底）
   'code.verify': async (input) => {
-    return {
-      finalAnswer: 'STUB',
-      verdict: { pass: true, reason: 'stub', evidenceCount: (input.evidence ?? []).length },
-      retries: 0,
-    };
+    const out = await verifyStep({
+      issue: input.issue,
+      evidence: input.evidence ?? [],
+      contract: input.contract,
+      drafts: input.drafts ?? [],
+      runId: String(input.runId ?? ''),
+    });
+    if (out.hardFail) {
+      // 引擎不能回退，用跨层 stop 把失败原因带回父流程（要求 4 的落点）
+      await stop('orchestration.main', { failed: true, failReason: out.verdict.reason });
+    }
+    return { finalAnswer: out.finalAnswer, verdict: out.verdict, retries: out.retries };
   },
 };

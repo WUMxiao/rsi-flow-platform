@@ -39,6 +39,11 @@ const ALLOWED_BY_TASK: Record<string, Contract['answerFormat'][]> = {
   kv_retrieval: ['uuid'],
   code_debug: ['choice_letter'],
   longbook_choice_eng: ['choice_letter'],
+  // 长文书问答的答案几乎都是短实体（人名/称谓/数字词），不允许退化成 digit_string：
+  // "How old is Felicity..." 的答案是 Thirty，被判成 digit_string 会让契约核验直接判死。
+  longbook_qa_chn: ['short_entity'],
+  longbook_qa_eng: ['short_entity'],
+  longdialogue_qa_eng: ['short_entity'],
   longbook_sum_eng: ['free_text'],
 };
 
@@ -137,6 +142,19 @@ export async function planStep(input: PlanInput): Promise<PlanOutput> {
     prior,
     totalChars: sample.context.length,
   });
+
+  // 位置先验只对"有词频分"的块有效；开头块常常一个检索词都不含（分数 0，乘多少还是 0）。
+  // 所以对 start/end 类问题强制把首/尾块塞进候选，保证 read 一定能看到开头/结尾原文。
+  let forced = 0;
+  if (prior !== 'none' && all.length > k) {
+    const edge = prior === 'start' ? all.slice(0, 1) : all.slice(-1);
+    const have = new Set(scored.map((s) => s.chunk.id));
+    const extra = edge.filter((c) => !have.has(c.id)).map((c) => ({ chunk: c, score: 0, hits: [] as string[] }));
+    if (extra.length) {
+      forced = extra.length;
+      scored = [...extra, ...scored].slice(0, k + forced);
+    }
+  }
   let fallback = '';
   if (!scored.length) {
     // 零命中：均匀取样兜底，绝不让下游拿到空数组（否则静默失败，看不出原因）
@@ -158,6 +176,7 @@ export async function planStep(input: PlanInput): Promise<PlanOutput> {
       hitTerms: scored.length ? scored[0].hits.slice(0, 10) : [],
       anchors,
       prior,
+      forced,
       fallback,
       llmUsed,
       llmLatencyMs: llmLatency,

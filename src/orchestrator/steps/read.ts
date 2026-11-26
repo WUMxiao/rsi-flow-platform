@@ -34,6 +34,23 @@ export interface ReadOutput {
   drafts: string[];
 }
 
+/** 最近一次 readStep 的逐批调试信息（CLI 用；不进流程结果） */
+export interface ReadBatchDebug {
+  index: number;
+  chunkIds: string[];
+  parsedOk: boolean;
+  rawHead: string;
+  evidenceCount: number;
+  error: string;
+  draft: string;
+}
+
+let lastDebug: ReadBatchDebug[] = [];
+
+export function lastReadDebug(): ReadBatchDebug[] {
+  return lastDebug;
+}
+
 interface BatchJson {
   found?: boolean;
   answer?: string;
@@ -52,6 +69,8 @@ async function readBatch(batch: ReadChunkIn[], question: string, contract: Contr
   tokens: number;
   latencyMs: number;
   error: string;
+  parsedOk: boolean;
+  rawHead: string;
 }> {
   const body = batch.map((c) => `<<${c.id}>>\n${c.text}`).join('\n\n');
   const t0 = Date.now();
@@ -100,6 +119,8 @@ async function readBatch(batch: ReadChunkIn[], question: string, contract: Contr
       tokens: res.usage.promptTokens + res.usage.completionTokens,
       latencyMs: Date.now() - t0,
       error: parsed ? '' : 'JSON 解析失败',
+      parsedOk: Boolean(parsed),
+      rawHead: (res.text ?? '').slice(0, 300),
     };
   } catch (err) {
     return {
@@ -108,6 +129,8 @@ async function readBatch(batch: ReadChunkIn[], question: string, contract: Contr
       tokens: 0,
       latencyMs: Date.now() - t0,
       error: err instanceof Error ? err.message : String(err),
+      parsedOk: false,
+      rawHead: '',
     };
   }
 }
@@ -125,6 +148,16 @@ export async function readStep(input: ReadInput): Promise<ReadOutput> {
   const settled = await Promise.all(
     batches.map((b, i) => readBatch(b, input.question, input.contract, i)),
   );
+
+  lastDebug = settled.map((s, i) => ({
+    index: i,
+    chunkIds: batches[i].map((c) => c.id),
+    parsedOk: s.parsedOk,
+    rawHead: s.rawHead,
+    evidenceCount: s.evidence.length,
+    error: s.error,
+    draft: s.draft,
+  }));
 
   const evidence = settled.flatMap((s) => s.evidence);
   // 已验证的排前面；同一这段文字只留一条

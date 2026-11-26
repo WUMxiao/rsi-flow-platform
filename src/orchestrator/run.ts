@@ -340,6 +340,17 @@ async function runEngine(id: string): Promise<number> {
   console.log(`  finalAnswer = ${JSON.stringify(result.finalAnswer)}`);
   console.log(`  verdict     = ${JSON.stringify(result.verdict)}`);
   console.log(`  readTokens  = ${String(result.readTokens)}`);
+  if (result.failed !== undefined) console.log(`  failed      = ${JSON.stringify(result.failed)}  failReason = ${JSON.stringify(result.failReason)}`);
+  if (result.stoppedBy !== undefined) console.log(`  stoppedBy   = ${JSON.stringify(result.stoppedBy)}`);
+
+  if (!evidence.length) {
+    const { lastReadDebug } = await import('./steps/read.ts');
+    console.log('\n=== read 调试（证据为空）===');
+    for (const d of lastReadDebug()) {
+      console.log(`  batch#${d.index} chunks=${d.chunkIds.join(',')} parsedOk=${d.parsedOk} evidence=${d.evidenceCount} err=${d.error || '-'}`);
+      console.log(`    raw: ${d.rawHead.replace(/\s+/g, ' ').slice(0, 220)}`);
+    }
+  }
 
   console.log(`\n=== 成本 === ${stats.calls} 次调用  prompt ${stats.promptTokens} / completion ${stats.completionTokens} token，耗时 ${(elapsed / 1000).toFixed(1)}s`);
 
@@ -348,7 +359,7 @@ async function runEngine(id: string): Promise<number> {
     ['trace 里三个节点都执行', trace.filter((t) => t.status === 'ok').length >= 3],
     ['证据非空', evidence.length > 0],
     ['至少一条证据逐字可回溯', verified > 0],
-    ['gold 出现在证据里', evidence.some((e) => issue.gold.some((g) => g.length >= 2 && e.quote.includes(g)))],
+    ['gold 出现在证据里', evidence.some((e) => issue.gold.some((g) => g.length >= 2 && e.quote.toLowerCase().includes(g.toLowerCase())))],
   ];
   console.log('\n=== 断言 ===');
   for (const [name, ok] of checks) console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}`);

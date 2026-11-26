@@ -30,7 +30,7 @@ export const FLOWS: Record<string, FlowConfig> = {
     platform: 'frontend',
     async: false,
     params: [A('issue'), S('sampleId'), S('runId'), S('traceId'), B('stopAfterRead')],
-    results: [A('finalAnswer'), A('verdict'), A('evidence'), A('readTokens'), A('retries'), A('stoppedBy')],
+    results: [A('finalAnswer'), A('verdict'), A('evidence'), A('readTokens'), A('retries'), A('stoppedBy'), A('failed'), A('failReason')],
     nodes: [
       {
         id: 'plan',
@@ -65,7 +65,7 @@ export const FLOWS: Record<string, FlowConfig> = {
     ],
     // 结构出处：autogen 阶段由 LLM 生成时改成 'llm'，人改过的字段写进 humanTouched
     // extraResults：stop() 注入的字段不打 results 声明，单独列出（校验器 R7 会用到）
-    meta: { authoredBy: 'human', humanTouched: ['nodes', 'routes', 'params', 'results'], extraResults: ['stoppedBy'] },
+    meta: { authoredBy: 'human', humanTouched: ['nodes', 'routes', 'params', 'results'], extraResults: ['stoppedBy', 'failed', 'failReason'] },
   } as unknown as FlowConfig,
 
   [FLOW_READ]: {
