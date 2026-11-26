@@ -383,7 +383,7 @@ async function runAll(): Promise<number> {
   const { mainIssues } = await import('./issues.ts');
   const { currentStats, runWithStats } = await import('./llm.ts');
   const { runOrchestration } = await import('./bootstrap.ts');
-  const { verdict } = await import('./score.ts');
+  const { verdict, verdictNormalized } = await import('./score.ts');
   const { RESULTS_DIR } = await import('./env.ts');
 
   const allIssues = mainIssues();
@@ -446,6 +446,7 @@ async function runAll(): Promise<number> {
 
     const answer = String(result.finalAnswer ?? '');
     const v = verdict(answer, issue.gold);
+    const vn = verdictNormalized(answer, issue.gold);
     const evidence = (result.evidence ?? []) as any[];
     const row = {
       id: issue.id,
@@ -457,9 +458,11 @@ async function runAll(): Promise<number> {
       /** 契约通过：格式合规 + 答案能在证据里找到。**不等于答对**，只用于内部调试 */
       verdict: result.verdict ?? { pass: false, reason: fatal ? 'fatal' : 'missing' },
       contractPass: Boolean((result.verdict as any)?.pass),
-      /** 与 gold 严格比对 —— 页面、文档、汇报只认这个 */
-      strictPass: v.pass,
-      strictReason: v.reason,
+      /** 原始严格匹配（只做大小写/标点规范化） */
+      strictPassRaw: v.pass,
+      /** 规范化后严格匹配（另加去尾量词、数字形态互转）—— 页面默认用这个，但两个数都要露出来 */
+      strictPass: vn.pass,
+      strictReason: vn.reason,
       baseline: issue.baseline,
       ctxChars: issue.ctxChars,
       ms: Date.now() - t0,
@@ -669,6 +672,36 @@ async function expandIssues(): Promise<number> {
   return 0;
 }
 
+/** 只重算判分字段（0 次模型调用）：规则改了就重跑这一条命令，不用重跑实验 */
+async function rescore(tag: string): Promise<number> {
+  const { verdict, verdictNormalized } = await import('./score.ts');
+  const { RESULTS_DIR } = await import('./env.ts');
+
+  const file = path.join(RESULTS_DIR, tag && tag !== 'results' ? `results.${tag}.json` : 'results.json');
+  if (!fs.existsSync(file)) {
+    console.error(`找不到 ${file}`);
+    return 2;
+  }
+  const data = JSON.parse(fs.readFileSync(file, 'utf8')) as { rows: any[] };
+  let raw = 0;
+  let norm = 0;
+  const flips: string[] = [];
+  for (const r of data.rows) {
+    const a = verdict(r.answer ?? '', r.gold ?? []);
+    const b = verdictNormalized(r.answer ?? '', r.gold ?? []);
+    r.strictPassRaw = a.pass;
+    r.strictPass = b.pass;
+    r.strictReason = b.reason;
+    if (a.pass) raw += 1;
+    if (b.pass) norm += 1;
+    if (!a.pass && b.pass) flips.push(r.id);
+  }
+  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
+  console.log(`原始严格 ${raw}/${data.rows.length} → 规范化后 ${norm}/${data.rows.length}`);
+  console.log(flips.length ? `翻转：${flips.join(', ')}` : '无翻转');
+  return 0;
+}
+
 async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
   const { findIssue } = await import('./issues.ts');
   const { llmStats, resetLlmStats } = await import('./llm.ts');
@@ -799,6 +832,10 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--rescore')) {
+    const i = argv.indexOf('--rescore');
+    return rescore(String(argv[i + 1] ?? ''));
+  }
   if (argv.includes('--expand-issues')) return expandIssues();
   if (argv.includes('--ablation')) return runAblation();
   if (argv.includes('--all')) return runAll();

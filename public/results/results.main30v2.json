@@ -153,7 +153,8 @@
           "endedAt": 1795702235557
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-02",
@@ -268,7 +269,8 @@
           "endedAt": 1795702251874
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-03",
@@ -288,8 +290,8 @@
         "note": "第 1 次答案「情侣」格式合规但证据里找不到"
       },
       "contractPass": false,
-      "strictPass": false,
-      "strictReason": "miss",
+      "strictPass": true,
+      "strictReason": "exact",
       "baseline": {
         "model": "gpt-6-sol",
         "raw": "夫妻关系。",
@@ -351,7 +353,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-04",
@@ -434,7 +437,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-05",
@@ -551,7 +555,8 @@
           "endedAt": 1795702256389
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-06",
@@ -655,7 +660,8 @@
           "endedAt": 1795702257121
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-07",
@@ -736,7 +742,8 @@
           "endedAt": 1795702260077
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-08",
@@ -856,7 +863,8 @@
           "endedAt": 1795702265949
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-09",
@@ -939,7 +947,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-10",
@@ -1059,7 +1068,8 @@
           "endedAt": 1795702263882
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-11",
@@ -1142,7 +1152,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-12",
@@ -1226,7 +1237,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-13",
@@ -1362,7 +1374,8 @@
           "endedAt": 1795702279232
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-14",
@@ -1445,7 +1458,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-15",
@@ -1551,7 +1565,8 @@
           "endedAt": 1795702322025
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-16",
@@ -1674,7 +1689,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-17",
@@ -1695,8 +1711,8 @@
         "note": "第 1 次答案「1次」格式合规但证据里找不到"
       },
       "contractPass": false,
-      "strictPass": false,
-      "strictReason": "miss",
+      "strictPass": true,
+      "strictReason": "exact",
       "baseline": {
         "model": "gpt-6-sol",
         "raw": "两次。",
@@ -1735,7 +1751,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-18",
@@ -1755,8 +1772,8 @@
         "note": ""
       },
       "contractPass": true,
-      "strictPass": false,
-      "strictReason": "miss",
+      "strictPass": true,
+      "strictReason": "exact",
       "baseline": {
         "model": "gpt-6-sol",
         "raw": "文中未提及。",
@@ -1835,7 +1852,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-19",
@@ -1956,7 +1974,8 @@
           "endedAt": 1795702353801
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-20",
@@ -2045,7 +2064,8 @@
           "outKeys": []
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-21",
@@ -2149,7 +2169,8 @@
           "endedAt": 1795702381279
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-22",
@@ -2274,7 +2295,8 @@
           "endedAt": 1795702366567
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-23",
@@ -2399,7 +2421,8 @@
           "endedAt": 1795702371449
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-24",
@@ -2503,7 +2526,8 @@
           "endedAt": 1795702385729
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-25",
@@ -2607,7 +2631,8 @@
           "endedAt": 1795702387052
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-26",
@@ -2711,7 +2736,8 @@
           "endedAt": 1795702410703
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": true
     },
     {
       "id": "IB-27",
@@ -2809,7 +2835,8 @@
           "endedAt": 1795702420232
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-28",
@@ -2960,7 +2987,8 @@
           "endedAt": 1795702540937
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-29",
@@ -3090,7 +3118,8 @@
           "endedAt": 1795702442398
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     },
     {
       "id": "IB-30",
@@ -3193,7 +3222,8 @@
           "endedAt": 1795702427930
         }
       ],
-      "error": ""
+      "error": "",
+      "strictPassRaw": false
     }
   ]
 }
