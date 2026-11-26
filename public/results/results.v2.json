@@ -1,0 +1,580 @@
+{
+  "generatedAt": "2026-11-26T10:16:33.692Z",
+  "flow": "orchestration.v2",
+  "rows": [
+    {
+      "id": "IB-01",
+      "task": "longbook_qa_chn",
+      "gold": [
+        "否"
+      ],
+      "answer": "",
+      "autoPass": false,
+      "autoReason": "miss",
+      "ms": 262102,
+      "calls": 2,
+      "trace": [
+        {
+          "runId": "v2-1795687117955-IB-01",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687117955,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687138828
+        },
+        {
+          "runId": "v2-1795687117955-IB-01",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687138828,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687380055
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-02",
+      "task": "longbook_qa_chn",
+      "gold": [
+        "五",
+        "5"
+      ],
+      "answer": "3个",
+      "autoPass": false,
+      "autoReason": "miss",
+      "ms": 67156,
+      "calls": 3,
+      "trace": [
+        {
+          "runId": "v2-1795687380059-IB-02",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687380059,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687397085
+        },
+        {
+          "runId": "v2-1795687380059-IB-02",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687397085,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687447215
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-03",
+      "task": "longbook_qa_chn",
+      "gold": [
+        "情侣"
+      ],
+      "answer": "情侣",
+      "autoPass": true,
+      "autoReason": "exact",
+      "ms": 250750,
+      "calls": 2,
+      "trace": [
+        {
+          "runId": "v2-1795687447219-IB-03",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687447219,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687456740
+        },
+        {
+          "runId": "v2-1795687447219-IB-03",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687456740,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687697968
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-04",
+      "task": "longbook_qa_chn",
+      "gold": [
+        "喝醉"
+      ],
+      "answer": "重生后不再放纵，重拾歌手老本行。",
+      "autoPass": false,
+      "autoReason": "miss",
+      "ms": 22538,
+      "calls": 3,
+      "trace": [
+        {
+          "runId": "v2-1795687697970-IB-04",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687697970,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687708226
+        },
+        {
+          "runId": "v2-1795687697970-IB-04",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687708226,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687720505
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-05",
+      "task": "longbook_qa_chn",
+      "gold": [
+        "0",
+        "零",
+        "无",
+        "没有"
+      ],
+      "answer": "",
+      "autoPass": false,
+      "autoReason": "miss",
+      "ms": 12664,
+      "calls": 3,
+      "trace": [
+        {
+          "runId": "v2-1795687720509-IB-05",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687720509,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687728188
+        },
+        {
+          "runId": "v2-1795687720509-IB-05",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687728188,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687733172
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-06",
+      "task": "passkey",
+      "gold": [
+        "99700"
+      ],
+      "answer": "99700",
+      "autoPass": true,
+      "autoReason": "exact",
+      "ms": 45646,
+      "calls": 2,
+      "trace": [
+        {
+          "runId": "v2-1795687733174-IB-06",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687733174,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687772540
+        },
+        {
+          "runId": "v2-1795687733174-IB-06",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687772540,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687778820
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-07",
+      "task": "number_string",
+      "gold": [
+        "3333995555"
+      ],
+      "answer": "3333995555",
+      "autoPass": true,
+      "autoReason": "exact",
+      "ms": 7577,
+      "calls": 2,
+      "trace": [
+        {
+          "runId": "v2-1795687778821-IB-07",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687778821,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687782318
+        },
+        {
+          "runId": "v2-1795687778821-IB-07",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687782318,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687786398
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-08",
+      "task": "kv_retrieval",
+      "gold": [
+        "a3fa5e4c-705c-4fad-bb48-b37a21f437cc"
+      ],
+      "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
+      "autoPass": true,
+      "autoReason": "exact",
+      "ms": 13784,
+      "calls": 2,
+      "trace": [
+        {
+          "runId": "v2-1795687786399-IB-08",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687786399,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687793478
+        },
+        {
+          "runId": "v2-1795687786399-IB-08",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687793479,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687800183
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-09",
+      "task": "longbook_qa_eng",
+      "gold": [
+        "Thirty"
+      ],
+      "answer": "About thirty years old",
+      "autoPass": true,
+      "autoReason": "contains",
+      "ms": 46236,
+      "calls": 3,
+      "trace": [
+        {
+          "runId": "v2-1795687800184-IB-09",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687800184,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687809040
+        },
+        {
+          "runId": "v2-1795687800184-IB-09",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687809040,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795687846419
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-10",
+      "task": "code_debug",
+      "gold": [
+        "_init"
+      ],
+      "answer": "",
+      "autoPass": false,
+      "autoReason": "miss",
+      "ms": 347272,
+      "calls": 1,
+      "trace": [
+        {
+          "runId": "v2-1795687846420-IB-10",
+          "flowId": "orchestration.v2",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795687846420,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795687952464
+        },
+        {
+          "runId": "v2-1795687846420-IB-10",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795687952464,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795688193692
+        }
+      ],
+      "error": ""
+    }
+  ]
+}

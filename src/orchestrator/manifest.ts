@@ -15,6 +15,8 @@ export interface NodeSpec {
   desc: string;
   /** 归属流程：用于静态深度、trace 归属、以及"节点被放错流程"的检查 */
   flowId: string;
+  /** 允许被复用到哪些其他流程（消融流程 orchestration.v2 会用） */
+  aliases?: string[];
   params: FlowValue[];
   results: FlowValue[];
   deterministic: boolean;
@@ -32,6 +34,7 @@ export const MANIFEST: NodeSpec[] = [
     title: '切块 + 契约 + 检索词',
     desc: '把长文档按窗口切块、用本地检索筛候选块、一次 LLM 调用生成输出契约与检索词。',
     flowId: 'orchestration.main',
+    aliases: ['orchestration.v2'],
     params: [A('issue'), S('sampleId'), S('runId')],
     results: [A('chunks'), A('contract'), A('keywords'), A('planMeta')],
     deterministic: false,

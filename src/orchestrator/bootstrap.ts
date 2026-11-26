@@ -19,6 +19,8 @@ const SPEC = new Map(MANIFEST.map((s) => [s.codeId, s]));
 /** 模块级 trace：不用 args 传（args 会被 checkAllArgs 按 params 裁剪） */
 let trace: TraceEntry[] = [];
 let currentRunId = '';
+/** 本次从哪个流程作为根进入：消融流程复用 main 的节点，trace 归属要跟着根走 */
+let activeRoot = 'orchestration.main';
 
 export function beginRun(runId: string): void {
   currentRunId = runId;
@@ -37,11 +39,13 @@ export function flowDepth(flowId: string): number {
 function wrap(codeId: string, fn: (input: any) => Promise<Record<string, unknown>>) {
   const spec = SPEC.get(codeId);
   return async (input: Record<string, unknown>) => {
+    // 消融流程复用 main 的节点时，归属按其根流程记，别把 v2 的 plan 记成 main 的
+    const owner = spec && spec.flowId === 'orchestration.main' && activeRoot !== 'orchestration.main' ? activeRoot : spec?.flowId ?? 'unknown';
     const entry: TraceEntry = {
       runId: currentRunId,
-      flowId: spec?.flowId ?? 'unknown',
+      flowId: owner,
       nodeId: codeId,
-      depth: (DEPTHS[spec?.flowId ?? ''] ?? 0) + 1,
+      depth: (DEPTHS[owner] ?? 0) + 1,
       startedAt: Date.now(),
       status: 'pending',
       inKeys: Object.keys(input ?? {}),
@@ -93,10 +97,14 @@ export interface RunOutcome {
 }
 
 /** 真正的一次编排执行：平台引擎 run()，不是自写调度器 */
-export async function runOrchestration(input: Record<string, unknown>): Promise<RunOutcome> {
+export async function runOrchestration(
+  input: Record<string, unknown>,
+  flowId = 'orchestration.main',
+): Promise<RunOutcome> {
   initOrchestration();
+  activeRoot = flowId;
   beginRun(String(input.runId ?? 'run'));
-  const result = await flow.run('orchestration.main', input);
+  const result = await flow.run(flowId, input);
   return { result: result ?? {}, trace: snapshotTrace() };
 }
 

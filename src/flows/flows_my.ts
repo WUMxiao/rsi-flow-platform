@@ -21,6 +21,7 @@ const B = (name: string) => ({ name, type: 'boolean' as const });
 export const FLOW_MAIN = 'orchestration.main';
 export const FLOW_READ = 'orchestration.read';
 export const FLOW_VERIFY = 'orchestration.verify';
+export const FLOW_V2 = 'orchestration.v2';
 
 export const FLOWS: Record<string, FlowConfig> = {
   [FLOW_MAIN]: {
@@ -116,6 +117,41 @@ export const FLOWS: Record<string, FlowConfig> = {
       { source: 'check', target: 'end' },
     ],
     meta: { authoredBy: 'human', humanTouched: ['nodes', 'routes', 'params', 'results'] },
+  } as unknown as FlowConfig,
+  // 消融用：两层（plan → read），砍掉 verify。
+  // 用它和 main 对照，回答"第三层到底值多少"。
+  [FLOW_V2]: {
+    id: FLOW_V2,
+    title: '两层消融（plan→read）',
+    type: 'flow',
+    platform: 'frontend',
+    async: false,
+    params: [A('issue'), S('sampleId'), S('runId'), S('traceId'), B('stopAfterRead')],
+    results: [A('evidence'), A('readTokens'), A('drafts'), A('chunks')],
+    nodes: [
+      {
+        id: 'plan',
+        type: 'event',
+        title: '切块 + 契约 + 检索词',
+        reference: 'code.plan',
+        params: [A('issue'), S('sampleId'), S('runId')],
+        results: [A('chunks'), A('contract'), A('keywords'), A('planMeta')],
+      },
+      {
+        id: 'read',
+        type: 'flow',
+        title: '读取层（子流程）',
+        reference: FLOW_READ,
+        params: [],
+        results: [],
+      },
+    ],
+    routes: [
+      { source: 'start', target: 'plan' },
+      { source: 'plan', target: 'read' },
+      { source: 'read', target: 'end' },
+    ],
+    meta: { authoredBy: 'human', humanTouched: ['nodes', 'routes'] },
   } as unknown as FlowConfig,
 };
 

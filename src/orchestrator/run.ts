@@ -378,7 +378,7 @@ async function runAll(): Promise<number> {
   const onlyIdx = process.argv.indexOf('--only');
   const only = onlyIdx >= 0 ? String(process.argv[onlyIdx + 1] ?? '').split(',').map((s) => s.trim()).filter(Boolean) : [];
   const issues = only.length ? allIssues.filter((i) => only.includes(i.id)) : allIssues;
-  const rows: any[] = [];
+
   let calls = 0;
   let promptTokens = 0;
   let completionTokens = 0;
@@ -388,6 +388,14 @@ async function runAll(): Promise<number> {
   const tagIdx = process.argv.indexOf('--tag');
   const tag = tagIdx >= 0 ? String(process.argv[tagIdx + 1] ?? '') : '';
   const outFile = path.join(RESULTS_DIR, tag ? `results.${tag}.json` : 'results.json');
+
+  // 结果按 id 累积写入：部分重跑时保留其他条目，避免整份文件被冲掉
+  const priorRows: any[] = fs.existsSync(outFile) ? ((JSON.parse(fs.readFileSync(outFile, 'utf8')) as any).rows ?? []) : [];
+  const store = new Map<string, any>(priorRows.map((r: any) => [r.id, r]));
+  const writeStore = () => {
+    const merged = allIssues.map((i) => store.get(i.id)).filter(Boolean);
+    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows: merged }, null, 2), 'utf8');
+  };
 
   for (let i = 0; i < issues.length; i += 1) {
     const issue = issues[i];
@@ -438,8 +446,8 @@ async function runAll(): Promise<number> {
       trace,
       error: fatal,
     };
-    rows.push(row);
-    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows }, null, 2), 'utf8');
+    store.set(issue.id, row);
+    writeStore();
 
     console.log(
       `[${i + 1}/${issues.length}] ${pad(issue.id, 6)} ${pad(issue.task, 18)} ans=${JSON.stringify(answer).slice(0, 26)} ` +
@@ -447,15 +455,7 @@ async function runAll(): Promise<number> {
     );
   }
 
-  // 只重跑部分条目时，与既有结果合并（保留顺序），避免丢掉其他条的数据
-  let finalRows = rows;
-  if (only.length && fs.existsSync(outFile)) {
-    const prev = JSON.parse(fs.readFileSync(outFile, 'utf8')) as { rows: any[] };
-    const map = new Map(prev.rows.map((r) => [r.id, r]));
-    for (const r of rows) map.set(r.id, r);
-    finalRows = allIssues.map((i) => map.get(i.id)).filter(Boolean);
-    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows: finalRows }, null, 2), 'utf8');
-  }
+  const finalRows = allIssues.map((i) => store.get(i.id)).filter(Boolean);
 
   // 汇总表
   console.log(`\n${pad('ID', 7)}${pad('TASK', 19)}${pad('BASELINE', 30)}${pad('OURS', 26)}AUTO   CALLS  SEC`);
@@ -471,6 +471,89 @@ async function runAll(): Promise<number> {
   console.log(`\n自动判定：修复后 ${pass}/${finalRows.length} 通过，基线（官方分 ≥0.5）${basePass}/${finalRows.length}`);
   console.log(`本轮调用 ${calls} 次${only.length ? `（仅重跑 ${only.join(',')}）` : ''}，prompt ${promptTokens} / completion ${completionTokens} token，耗时 ${((Date.now() - startedAll) / 60000).toFixed(1)} 分钟`);
   console.log(`结果已写入 ${path.relative(process.cwd(), outFile)}`);
+  return 0;
+}
+
+/** 消融：同一批问题走两层结构（plan→read），答案取 read 的草稿 */
+async function runAblation(): Promise<number> {
+  const { mainIssues } = await import('./issues.ts');
+  const { llmStats, resetLlmStats } = await import('./llm.ts');
+  const { runOrchestration } = await import('./bootstrap.ts');
+  const { verdict } = await import('./score.ts');
+  const { RESULTS_DIR } = await import('./env.ts');
+
+  const issues = mainIssues();
+  const rows: any[] = [];
+  let calls = 0;
+  let prompt = 0;
+  let completion = 0;
+  const t0 = Date.now();
+  fs.mkdirSync(RESULTS_DIR, { recursive: true });
+  const outFile = path.join(RESULTS_DIR, 'results.v2.json');
+
+  for (let i = 0; i < issues.length; i += 1) {
+    const issue = issues[i];
+    resetLlmStats();
+    const s = Date.now();
+    let answer = '';
+    let trace: any[] = [];
+    let error = '';
+    try {
+      const r = await runOrchestration(
+        { issue, sampleId: issue.sampleId, runId: `v2-${s}-${issue.id}`, traceId: `T2-${issue.id}`, stopAfterRead: false },
+        'orchestration.v2',
+      );
+      const drafts = (r.result.drafts ?? []) as string[];
+      answer = drafts.find((d) => d && d.trim()) ?? '';
+      trace = r.trace;
+    } catch (err) {
+      error = err instanceof Error ? err.message : String(err);
+    }
+    const stats = llmStats();
+    calls += stats.calls;
+    prompt += stats.promptTokens;
+    completion += stats.completionTokens;
+    const v = verdict(answer, issue.gold);
+    rows.push({
+      id: issue.id,
+      task: issue.task,
+      gold: issue.gold,
+      answer,
+      autoPass: v.pass,
+      autoReason: v.reason,
+      ms: Date.now() - s,
+      calls: stats.calls,
+      trace,
+      error,
+    });
+    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), flow: 'orchestration.v2', rows }, null, 2), 'utf8');
+    console.log(`[V2 ${i + 1}/${issues.length}] ${pad(issue.id, 6)} ans=${JSON.stringify(answer).slice(0, 26)} auto=${v.pass ? 'PASS' : 'miss'} calls=${stats.calls}`);
+  }
+
+  // 与三层结果对照（若存在）
+  let mainRows: any[] = [];
+  for (const candidate of ['results.pass1.json', 'results.json']) {
+    const f = path.join(RESULTS_DIR, candidate);
+    if (fs.existsSync(f)) {
+      mainRows = (JSON.parse(fs.readFileSync(f, 'utf8')) as any).rows ?? [];
+      if (mainRows.length) break;
+    }
+  }
+
+  console.log(`\n${pad('ID', 7)}${pad('TASK', 19)}${pad('V2 两层', 24)}${pad('V3 三层', 24)}Δ`);
+  console.log('-'.repeat(90));
+  let v2pass = 0;
+  let v3pass = 0;
+  for (const r of rows) {
+    const m = mainRows.find((x) => x.id === r.id);
+    if (r.autoPass) v2pass += 1;
+    if (m?.autoPass) v3pass += 1;
+    console.log(
+      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(`${r.autoPass ? 'PASS' : 'miss'} ${String(r.answer).slice(0, 14)}`, 24)}${pad(`${m ? (m.autoPass ? 'PASS' : 'miss') : '-'} ${String(m?.answer ?? '').slice(0, 14)}`, 24)}${m ? (m.autoPass === r.autoPass ? '' : '≠') : ''}`,
+    );
+  }
+  console.log(`\n两层 ${v2pass}/${rows.length} 通过，三层 ${v3pass}/${rows.length} 通过`);
+  console.log(`消融调用 ${calls} 次，prompt ${prompt} / completion ${completion} token，耗时 ${((Date.now() - t0) / 60000).toFixed(1)} 分钟`);
   return 0;
 }
 
@@ -604,6 +687,7 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--ablation')) return runAblation();
   if (argv.includes('--all')) return runAll();
   if (argv.includes('--engine')) {
     const i = argv.indexOf('--engine');

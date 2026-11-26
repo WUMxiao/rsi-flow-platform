@@ -123,7 +123,7 @@ export function validateFlow(flowId: string, cfg: LooseFlow, all: Record<string,
         err('R5', `未注册的节点实现: ${n.reference}`, n.id);
         continue;
       }
-      if (spec.flowId !== flowId) {
+      if (spec.flowId !== flowId && !(spec.aliases ?? []).includes(flowId)) {
         warn('R6', `节点 ${n.reference} 归属 ${spec.flowId}，被放进了 ${flowId}`, n.id);
       }
       const allowedIn = new Set(names(spec.params));
