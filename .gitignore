@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 保留模板，便于公开仓库克隆后填本地配置
+!.env.example
