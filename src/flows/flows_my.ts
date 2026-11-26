@@ -30,7 +30,7 @@ export const FLOWS: Record<string, FlowConfig> = {
     platform: 'frontend',
     async: false,
     params: [A('issue'), S('sampleId'), S('runId'), S('traceId'), B('stopAfterRead')],
-    results: [A('finalAnswer'), A('verdict'), A('evidence'), A('retries'), A('stoppedBy')],
+    results: [A('finalAnswer'), A('verdict'), A('evidence'), A('readTokens'), A('retries'), A('stoppedBy')],
     nodes: [
       {
         id: 'plan',
@@ -74,7 +74,7 @@ export const FLOWS: Record<string, FlowConfig> = {
     type: 'flow',
     platform: 'frontend',
     async: false,
-    params: [A('chunks'), A('contract'), S('runId'), S('traceId'), B('stopAfterRead')],
+    params: [A('issue'), A('chunks'), A('contract'), S('runId'), S('traceId'), B('stopAfterRead')],
     results: [A('evidence'), A('readTokens'), A('drafts')],
     nodes: [
       {
@@ -82,7 +82,7 @@ export const FLOWS: Record<string, FlowConfig> = {
         type: 'event',
         title: '并发精读 N 个块',
         reference: 'code.read',
-        params: [A('chunks'), A('contract'), S('runId'), S('traceId'), B('stopAfterRead')],
+        params: [A('issue'), A('chunks'), A('contract'), S('runId'), S('traceId'), B('stopAfterRead')],
         results: [A('evidence'), A('readTokens'), A('drafts')],
       },
     ],

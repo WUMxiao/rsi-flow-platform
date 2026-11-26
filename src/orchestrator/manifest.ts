@@ -44,7 +44,7 @@ export const MANIFEST: NodeSpec[] = [
     title: '批量精读',
     desc: '把候选块分批喂模型，要求逐字引用；节点内 Promise.all 扇出（引擎同层串行）。',
     flowId: 'orchestration.read',
-    params: [A('chunks'), A('contract'), S('runId'), S('traceId'), { name: 'stopAfterRead', type: 'boolean', notnull: false }],
+    params: [A('issue'), A('chunks'), A('contract'), S('runId'), S('traceId'), { name: 'stopAfterRead', type: 'boolean', notnull: false }],
     results: [A('evidence'), A('readTokens'), A('drafts')],
     deterministic: false,
     verifiable: true,

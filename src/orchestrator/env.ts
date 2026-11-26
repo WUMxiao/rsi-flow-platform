@@ -20,6 +20,10 @@ export const CHUNK_SIZE = Number(env.CHUNK_SIZE ?? 4000);
 export const CHUNK_OVERLAP = Number(env.CHUNK_OVERLAP ?? 200);
 export const TOP_K = Number(env.TOP_K ?? 6);
 
+/** 读取层参数：一次调用塞几块（对抗 ~36s 延迟和 10k token 固定开销） */
+export const READ_BATCH = Number(env.READ_BATCH ?? 3);
+export const READ_MAX_TOKENS = Number(env.READ_MAX_TOKENS ?? 500);
+
 export const ISSUES_FILE = path.join(ROOT, 'data', 'issues.jsonl');
 export const RESULTS_DIR = path.join(ROOT, 'public', 'results');
 

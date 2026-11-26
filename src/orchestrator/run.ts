@@ -302,6 +302,59 @@ async function planReport(): Promise<number> {
   return 0;
 }
 
+/** 单条问题走平台引擎（真嵌套 + 真节点），S4 起用于验收 read */
+async function runEngine(id: string): Promise<number> {
+  const { findIssue } = await import('./issues.ts');
+  const { llmStats, resetLlmStats } = await import('./llm.ts');
+  const { runOrchestration } = await import('./bootstrap.ts');
+
+  const issue = findIssue(id);
+  resetLlmStats();
+  const t0 = Date.now();
+  const { result, trace } = await runOrchestration({
+    issue,
+    sampleId: issue.sampleId,
+    runId: `engine-${t0}`,
+    traceId: `T-${t0}`,
+    stopAfterRead: false,
+  });
+  const elapsed = Date.now() - t0;
+  const stats = llmStats();
+
+  console.log('=== trace ===');
+  console.log(`${pad('depth', 7)}${pad('flowId', 22)}${pad('nodeId', 12)}${pad('status', 8)}${pad('ms', 7)}in → out`);
+  for (const e of trace) {
+    console.log(
+      `${pad(String(e.depth), 7)}${pad(e.flowId, 22)}${pad(e.nodeId, 12)}${pad(e.status, 8)}${pad(String((e.endedAt ?? 0) - e.startedAt), 7)}[${e.inKeys.join(',')}] → [${e.outKeys.join(',')}]`,
+    );
+  }
+
+  const evidence = (result.evidence ?? []) as Array<{ chunkId: string; quote: string; verified: boolean }>;
+  console.log('\n=== 证据 ===');
+  if (!evidence.length) console.log('  （空）');
+  evidence.slice(0, 6).forEach((e, i) => {
+    console.log(`  ${i + 1}. [${e.verified ? 'VERIFIED' : 'unverified'}] ${e.chunkId}  ${e.quote.slice(0, 110).replace(/\s+/g, ' ')}`);
+  });
+
+  console.log('\n=== 返回 ===');
+  console.log(`  finalAnswer = ${JSON.stringify(result.finalAnswer)}`);
+  console.log(`  verdict     = ${JSON.stringify(result.verdict)}`);
+  console.log(`  readTokens  = ${String(result.readTokens)}`);
+
+  console.log(`\n=== 成本 === ${stats.calls} 次调用  prompt ${stats.promptTokens} / completion ${stats.completionTokens} token，耗时 ${(elapsed / 1000).toFixed(1)}s`);
+
+  const verified = evidence.filter((e) => e.verified).length;
+  const checks: Array<[string, boolean]> = [
+    ['trace 里三个节点都执行', trace.filter((t) => t.status === 'ok').length >= 3],
+    ['证据非空', evidence.length > 0],
+    ['至少一条证据逐字可回溯', verified > 0],
+    ['gold 出现在证据里', evidence.some((e) => issue.gold.some((g) => g.length >= 2 && e.quote.includes(g)))],
+  ];
+  console.log('\n=== 断言 ===');
+  for (const [name, ok] of checks) console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}`);
+  return checks.every(([, ok]) => ok) ? 0 : 1;
+}
+
 async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
   const { findIssue } = await import('./issues.ts');
   const { llmStats, resetLlmStats } = await import('./llm.ts');
@@ -418,6 +471,7 @@ function usage(): void {
   --smoke-stop          空跑 + 跨层 stop，确认子流程能终止父流程
   --issue <id>          跑单条问题（S3 阶段只到 plan；加 --dry-plan 只看候选块）
   --dry-plan            只跑 code.plan，打印候选块与契约
+  --engine <id>         单条问题走平台引擎全流程（真嵌套），打印 trace 与证据
   --plan-report         12 条全跑 code.plan（不调模型），体检检索命中率
   --no-llm              不调模型（契约用任务类型兜底），用于离线调试
   --all                 （S6 起）跑全部 10 条
@@ -431,6 +485,15 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--engine')) {
+    const i = argv.indexOf('--engine');
+    const id = argv[i + 1];
+    if (!id || id.startsWith('--')) {
+      console.error('--engine 需要一个 id，例如：--engine IB-06');
+      return 2;
+    }
+    return runEngine(id);
+  }
   if (argv.includes('--plan-report')) return planReport();
   if (argv.includes('--issue')) {
     const i = argv.indexOf('--issue');
