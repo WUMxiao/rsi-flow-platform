@@ -188,8 +188,20 @@ async function checkIssues(): Promise<number> {
   if (failed.length === 0) {
     const issues = rows.map(buildIssue).filter((x): x is Issue => Boolean(x));
     fs.mkdirSync(path.dirname(ISSUES_FILE), { recursive: true });
-    fs.writeFileSync(ISSUES_FILE, issues.map((i) => JSON.stringify(i)).join('\n') + '\n', 'utf8');
-    console.log(`\n已写入 ${path.relative(process.cwd(), ISSUES_FILE)}（${issues.length} 条）`);
+    // 保留扩容样本（不在 SEED 里的行），否则重新对账会把 IB-11..IB-30 冲掉
+    const seedIds = new Set(SEED.map((s) => s.id));
+    let extra: Issue[] = [];
+    if (fs.existsSync(ISSUES_FILE)) {
+      extra = fs
+        .readFileSync(ISSUES_FILE, 'utf8')
+        .split('\n')
+        .filter((l) => l.trim())
+        .map((l) => JSON.parse(l) as Issue)
+        .filter((r) => !seedIds.has(r.id));
+    }
+    const merged = [...issues, ...extra].sort((a, b) => a.id.localeCompare(b.id));
+    fs.writeFileSync(ISSUES_FILE, merged.map((i) => JSON.stringify(i)).join('\n') + '\n', 'utf8');
+    console.log(`\n已写入 ${path.relative(process.cwd(), ISSUES_FILE)}（${merged.length} 条，其中扩容样本 ${extra.length} 条）`);
   } else {
     console.log(`\n${failed.length} 条未通过，未写入 issues.jsonl`);
   }
@@ -557,6 +569,76 @@ async function runAblation(): Promise<number> {
   return 0;
 }
 
+/** 按 docs/ISSUES.md §六 的规则扩容抽样（先注册、后抽题） */
+async function expandIssues(): Promise<number> {
+  const { loadIssues } = await import('./issues.ts');
+  const { ctxSha1, goldOf, loadSamples } = await import('./dataset.ts');
+  const { failingSampleIds } = await import('./baseline.ts');
+  const { ISSUES_FILE, MODEL } = await import('./env.ts');
+
+  const QUOTA: Array<[string, number, 'F1' | 'F4' | 'F6']> = [
+    ['longbook_qa_chn', 10, 'F1'],
+    ['passkey', 2, 'F4'],
+    ['number_string', 2, 'F4'],
+    ['kv_retrieval', 2, 'F6'],
+    ['longbook_qa_eng', 2, 'F1'],
+    ['code_debug', 2, 'F1'],
+  ];
+
+  const existing = loadIssues();
+  const used = new Set(existing.map((r) => `${r.task}:${r.sampleId}`));
+  const picks: Array<{ task: string; sid: string; type: 'F1' | 'F4' | 'F6' }> = [];
+
+  for (const [task, n, type] of QUOTA) {
+    const failing = await failingSampleIds(task);
+    const chosen = failing.filter((id) => !used.has(`${task}:${id}`)).slice(0, n);
+    if (chosen.length < n) console.warn(`  ! ${task} 只有 ${chosen.length} 个可用失败样本（需要 ${n}）`);
+    for (const sid of chosen) picks.push({ task, sid, type });
+  }
+
+  const rows: any[] = [];
+  let seq = 11;
+  for (const p of picks) {
+    const samples = await loadSamples(p.task, [p.sid]);
+    const s = samples.get(p.sid);
+    if (!s) {
+      console.warn(`  ! 取不到 ${p.task}#${p.sid}`);
+      continue;
+    }
+    const gold = goldOf(s);
+    rows.push({
+      id: `IB-${String(seq).padStart(2, '0')}`,
+      task: p.task,
+      sampleId: p.sid,
+      input: s.input,
+      gold,
+      ctxChars: s.context.length,
+      ctxSha1: ctxSha1(s.context),
+      failureType: p.type,
+      baseline: { model: MODEL, raw: '', score: 0, keepRatio: 0, promptTokens: 0, completionTokens: 0 },
+      note: '扩容样本：按 docs/ISSUES.md §六 规则随机前 N 个基线失败样本',
+    });
+    seq += 1;
+  }
+
+  // 回填这些样本的基线原文（对照表要用）
+  for (const r of rows) {
+    const { loadBaseline } = await import('./baseline.ts');
+    const b = (await loadBaseline(r.task, [r.sampleId])).get(r.sampleId);
+    if (b) r.baseline = { model: b.model, raw: b.raw, score: b.score, keepRatio: b.keepRatio, promptTokens: b.promptTokens, completionTokens: b.completionTokens };
+  }
+
+  const all = [...existing, ...rows].sort((a, b) => a.id.localeCompare(b.id));
+  fs.writeFileSync(ISSUES_FILE, all.map((r) => JSON.stringify(r)).join('\n') + '\n', 'utf8');
+
+  console.log(`${pad('ID', 7)}${pad('TASK', 19)}${pad('SID', 6)}${pad('CTX', 10)}GOLD`);
+  for (const r of rows) {
+    console.log(`${pad(r.id, 7)}${pad(r.task, 19)}${pad(r.sampleId, 6)}${pad(String(r.ctxChars), 10)}${JSON.stringify(r.gold).slice(0, 40)}`);
+  }
+  console.log(`\n新增 ${rows.length} 条，issues.jsonl 现共 ${all.length} 条`);
+  return 0;
+}
+
 async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
   const { findIssue } = await import('./issues.ts');
   const { llmStats, resetLlmStats } = await import('./llm.ts');
@@ -687,6 +769,7 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--expand-issues')) return expandIssues();
   if (argv.includes('--ablation')) return runAblation();
   if (argv.includes('--all')) return runAll();
   if (argv.includes('--engine')) {

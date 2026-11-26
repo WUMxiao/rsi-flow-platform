@@ -51,3 +51,24 @@ export async function loadBaseline(task: string, ids: string[]): Promise<Map<str
 
   return found;
 }
+
+/**
+ * 列出基线失败的 sample_id（score === 0），按数值升序。
+ * 扩容抽样用：规则是"基线失败的样本才入选"，这样分母里全是真实失败用例。
+ */
+export async function failingSampleIds(task: string): Promise<string[]> {
+  const file = baselinePath(task);
+  if (!fs.existsSync(file)) throw new Error(`基线文件不存在: ${file}`);
+  const out: string[] = [];
+  const rl = createInterface({ input: fs.createReadStream(file, { encoding: 'utf8' }), crlfDelay: Infinity });
+  try {
+    for await (const line of rl) {
+      if (!line.trim()) continue;
+      const o = JSON.parse(line) as Record<string, unknown>;
+      if (Number(o.score ?? 0) === 0) out.push(String(o.sample_id ?? ''));
+    }
+  } finally {
+    rl.close();
+  }
+  return out.filter(Boolean).sort((a, b) => Number(a) - Number(b));
+}

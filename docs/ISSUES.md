@@ -47,3 +47,43 @@
 - **CF-02**：摘要任务用 ROUGE，基线写了 627 字摘要、gold 更长，ROUGE 与人工判断负相关。这是**指标问题**。
 
 > 这两条决定了本任务的对照必须给“官方分 + 语义对错”两列，否则会把判分错误算成模型错误。
+
+## 六、扩容抽样规则（先注册，后抽题）
+
+原 10 条的分母太小（5/10 与 4/10 只差一条），因此把主问题扩到 **30 条**。
+**下面的规则在看到新增样本的结果之前写定**，任何人按此规则都能复现同一批题。
+
+| 项 | 规则 |
+|---|---|
+| 新增配额 | `longbook_qa_chn` 10、`passkey` 2、`number_string` 2、`kv_retrieval` 2、`longbook_qa_eng` 2、`code_debug` 2（与原 10 条的任务族比例一致，×2） |
+| 入选条件 | 基线 `gpt-6-sol` / v3 的 `score = 0`（即基线确实失败的样本），且 sample_id 未被原 10 条占用 |
+| 排序 | 同任务内按 `sample_id` 数值升序，取前 N 个 |
+| 编号 | `IB-11` … `IB-30`，按上表任务顺序连续编号 |
+| 失败类型 | 按任务族映射：`longbook_qa_*` → F1、`passkey`/`number_string` → F4、`kv_retrieval` → F6、`code_debug` → F1 |
+
+> 规则的作用是防止“看到结果再换题”。若新增 20 条里修好 ≥5 条，则总数 ≥10/30；若不足，就照实报告，不改抽样。
+
+## 七、扩容样本（按 §六 规则抽取，共 20 条）
+
+| # | 任务 / 样本 | 问题 | 期望 | ctx 字符 |
+|---|---|---|---|---|
+| IB-11 | `longbook_qa_chn` #19 | 哪一章的主角最后死了？ | 大回 | 28,207 |
+| IB-12 | `longbook_qa_chn` #40 | 狄仁杰的复仇计划有亲自动手吗？ | 否 / 不是 | 233,284 |
+| IB-13 | `longbook_qa_chn` #62 | 陈晋毅的父亲在陈晋毅多少岁时死的？ | 25 / 二十五 | 521,940 |
+| IB-14 | `longbook_qa_chn` #71 | 袁国洋的第二个师父是谁？ | 梅英道人 | 535,468 |
+| IB-15 | `longbook_qa_chn` #91 | 秉文总共有多少个二爷？ | 2 / 两 / 二 | 1,822,870 |
+| IB-16 | `longbook_qa_chn` #104 | 请问有多少个人当过皇帝？ | 4 / 四 / 四个 / 4个 | 1,729,011 |
+| IB-17 | `longbook_qa_chn` #106 | 姬象穿越过几次？ | 一 / 1 | 1,729,011 |
+| IB-18 | `longbook_qa_chn` #122 | 最后, 公司给王贵平的赔偿费是多少 | 十万 | 1,139,536 |
+| IB-19 | `longbook_qa_chn` #125 | 淑妃和她的孙女在哪里最后一次见面？ | 木屋 / 临时驻地 / 临时驻地的木屋 | 6,556,639 |
+| IB-20 | `longbook_qa_chn` #143 | 唐三一共花了多少费用拍下狐尾舍利和“迟缓之石” | 8000元素币 / 八千元素币 | 2,870,020 |
+| IB-21 | `passkey` #291 | What is the pass key? | 57654 | 469,858 |
+| IB-22 | `passkey` #295 | What is the pass key? | 82368 | 469,858 |
+| IB-23 | `number_string` #292 | What is the sequence of digits? | 4511111822 | 469,888 |
+| IB-24 | `number_string` #303 | What is the sequence of digits? | 6664444889 | 469,888 |
+| IB-25 | `kv_retrieval` #149 | Key: "e84c3080-45f6-4c50-9487-fd2be08bff23" The v… | 81c74316-6ce3-4dbc-… | 200,011 |
+| IB-26 | `kv_retrieval` #153 | Key: "b4911b8d-634d-49b2-92e0-c9c5d201857e" The v… | 17ee2cbf-d011-4fdb-… | 200,011 |
+| IB-27 | `longbook_qa_eng` #2 | What's the name of the Bronwyns' summer home? | the Hebrides | 381,748 |
+| IB-28 | `longbook_qa_eng` #43 | What happens to Viola after his date with Skylar … | Chong Hwa | 380,419 |
+| IB-29 | `code_debug` #63 | Which funtion has deliberate error? | Input._do_read | 693,285 |
+| IB-30 | `code_debug` #340 | Which funtion has deliberate error? | RemoteLink.moveIntf | 476,780 |
