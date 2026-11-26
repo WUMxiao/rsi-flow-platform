@@ -141,8 +141,8 @@ export default function OrchestrationPage() {
         style={{ marginBottom: 16 }}
         title="结论先行"        description={
           <span>
-            严格匹配 <b>{normPass}/30</b>（规范化后）/ <b>{rawPass}/30</b>（原始）。精确串类（passkey / number_string / kv）8/9；
-            长文问答 4/18；代码类 0/3。<b>这套结构的适用边界是“答案有唯一字面锚点”</b>，长文聚合类受限于覆盖率（单条只读全文 0.6%）。
+            严格匹配 <b>{normPass}/30</b>（规范化后）/ <b>{rawPass}/30</b>（原始）。精确串类（passkey / number_string / kv）<b>9/9</b>；
+            长文问答 6/18；代码类 0/3。<b>这套结构的适用边界是“答案有唯一字面锚点”</b>，长文聚合类受限于覆盖率（单条只读全文 0.62%）。
             第三层的可测量收益只有 1 条（格式契约），详见 docs/ORCHESTRATION.md。
           </span>
         }
