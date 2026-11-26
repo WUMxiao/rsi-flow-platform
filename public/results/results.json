@@ -1,0 +1,207 @@
+{
+  "generatedAt": "2026-11-26T09:24:32.890Z",
+  "rows": [
+    {
+      "id": "IB-03",
+      "task": "longbook_qa_chn",
+      "sampleId": "137",
+      "failureType": "F1",
+      "gold": [
+        "情侣"
+      ],
+      "answer": "情侣",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "autoPass": true,
+      "autoReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "夫妻关系。",
+        "score": 0,
+        "keepRatio": 0.0769,
+        "promptTokens": 175131,
+        "completionTokens": 103
+      },
+      "ctxChars": 2234380,
+      "ms": 36953,
+      "calls": 4,
+      "promptTokens": 56666,
+      "completionTokens": 313,
+      "evidenceCount": 2,
+      "verifiedCount": 2,
+      "trace": [
+        {
+          "runId": "all-1795685000585-IB-03",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795685000586,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795685011817
+        },
+        {
+          "runId": "all-1795685000585-IB-03",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795685011817,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795685026847
+        },
+        {
+          "runId": "all-1795685000585-IB-03",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795685026847,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795685037538
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-08",
+      "task": "kv_retrieval",
+      "sampleId": "9",
+      "failureType": "F6",
+      "gold": [
+        "a3fa5e4c-705c-4fad-bb48-b37a21f437cc"
+      ],
+      "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "uuid",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "autoPass": true,
+      "autoReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "a3fa5e4c-705c-4fad-bb48-b37a21f437c",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 53262,
+        "completionTokens": 123
+      },
+      "ctxChars": 200011,
+      "ms": 35349,
+      "calls": 2,
+      "promptTokens": 17462,
+      "completionTokens": 349,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "trace": [
+        {
+          "runId": "all-1795685037540-IB-08",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795685037540,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795685045820
+        },
+        {
+          "runId": "all-1795685037540-IB-08",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795685045820,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795685072888
+        },
+        {
+          "runId": "all-1795685037540-IB-08",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795685072888,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795685072889
+        }
+      ],
+      "error": ""
+    }
+  ]
+}

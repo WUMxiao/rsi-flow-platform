@@ -366,6 +366,114 @@ async function runEngine(id: string): Promise<number> {
   return checks.every(([, ok]) => ok) ? 0 : 1;
 }
 
+/** 全量 10 条：走引擎跑完，落盘 public/results/results.json */
+async function runAll(): Promise<number> {
+  const { mainIssues } = await import('./issues.ts');
+  const { llmStats, resetLlmStats } = await import('./llm.ts');
+  const { runOrchestration } = await import('./bootstrap.ts');
+  const { verdict } = await import('./score.ts');
+  const { RESULTS_DIR } = await import('./env.ts');
+
+  const allIssues = mainIssues();
+  const onlyIdx = process.argv.indexOf('--only');
+  const only = onlyIdx >= 0 ? String(process.argv[onlyIdx + 1] ?? '').split(',').map((s) => s.trim()).filter(Boolean) : [];
+  const issues = only.length ? allIssues.filter((i) => only.includes(i.id)) : allIssues;
+  const rows: any[] = [];
+  let calls = 0;
+  let promptTokens = 0;
+  let completionTokens = 0;
+  const startedAll = Date.now();
+
+  fs.mkdirSync(RESULTS_DIR, { recursive: true });
+  const tagIdx = process.argv.indexOf('--tag');
+  const tag = tagIdx >= 0 ? String(process.argv[tagIdx + 1] ?? '') : '';
+  const outFile = path.join(RESULTS_DIR, tag ? `results.${tag}.json` : 'results.json');
+
+  for (let i = 0; i < issues.length; i += 1) {
+    const issue = issues[i];
+    resetLlmStats();
+    const t0 = Date.now();
+    let result: Record<string, unknown> = {};
+    let trace: any[] = [];
+    let fatal = '';
+    try {
+      const r = await runOrchestration({
+        issue,
+        sampleId: issue.sampleId,
+        runId: `all-${t0}-${issue.id}`,
+        traceId: `T-${issue.id}`,
+        stopAfterRead: false,
+      });
+      result = r.result;
+      trace = r.trace;
+    } catch (err) {
+      fatal = err instanceof Error ? err.message : String(err);
+    }
+    const stats = llmStats();
+    calls += stats.calls;
+    promptTokens += stats.promptTokens;
+    completionTokens += stats.completionTokens;
+
+    const answer = String(result.finalAnswer ?? '');
+    const v = verdict(answer, issue.gold);
+    const evidence = (result.evidence ?? []) as any[];
+    const row = {
+      id: issue.id,
+      task: issue.task,
+      sampleId: issue.sampleId,
+      failureType: issue.failureType,
+      gold: issue.gold,
+      answer,
+      verdict: result.verdict ?? { pass: false, reason: fatal ? 'fatal' : 'missing' },
+      autoPass: v.pass,
+      autoReason: v.reason,
+      baseline: issue.baseline,
+      ctxChars: issue.ctxChars,
+      ms: Date.now() - t0,
+      calls: stats.calls,
+      promptTokens: stats.promptTokens,
+      completionTokens: stats.completionTokens,
+      evidenceCount: evidence.length,
+      verifiedCount: evidence.filter((e) => e && e.verified).length,
+      trace,
+      error: fatal,
+    };
+    rows.push(row);
+    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows }, null, 2), 'utf8');
+
+    console.log(
+      `[${i + 1}/${issues.length}] ${pad(issue.id, 6)} ${pad(issue.task, 18)} ans=${JSON.stringify(answer).slice(0, 26)} ` +
+        `auto=${row.autoPass ? 'PASS' : 'miss'} base=${issue.baseline.score} calls=${stats.calls} ${(row.ms / 1000).toFixed(0)}s`,
+    );
+  }
+
+  // 只重跑部分条目时，与既有结果合并（保留顺序），避免丢掉其他条的数据
+  let finalRows = rows;
+  if (only.length && fs.existsSync(outFile)) {
+    const prev = JSON.parse(fs.readFileSync(outFile, 'utf8')) as { rows: any[] };
+    const map = new Map(prev.rows.map((r) => [r.id, r]));
+    for (const r of rows) map.set(r.id, r);
+    finalRows = allIssues.map((i) => map.get(i.id)).filter(Boolean);
+    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows: finalRows }, null, 2), 'utf8');
+  }
+
+  // 汇总表
+  console.log(`\n${pad('ID', 7)}${pad('TASK', 19)}${pad('BASELINE', 30)}${pad('OURS', 26)}AUTO   CALLS  SEC`);
+  console.log('-'.repeat(110));
+  for (const r of finalRows) {
+    console.log(
+      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(String(r.baseline.raw).replace(/\s+/g, ' ').slice(0, 28), 30)}${pad(String(r.answer).replace(/\s+/g, ' ').slice(0, 24), 26)}${pad(r.autoPass ? 'PASS' : 'miss', 7)}${pad(String(r.calls), 6)}${Math.round(r.ms / 1000)}`,
+    );
+  }
+
+  const pass = finalRows.filter((r: any) => r.autoPass).length;
+  const basePass = finalRows.filter((r: any) => r.baseline.score >= 0.5).length;
+  console.log(`\n自动判定：修复后 ${pass}/${finalRows.length} 通过，基线（官方分 ≥0.5）${basePass}/${finalRows.length}`);
+  console.log(`本轮调用 ${calls} 次${only.length ? `（仅重跑 ${only.join(',')}）` : ''}，prompt ${promptTokens} / completion ${completionTokens} token，耗时 ${((Date.now() - startedAll) / 60000).toFixed(1)} 分钟`);
+  console.log(`结果已写入 ${path.relative(process.cwd(), outFile)}`);
+  return 0;
+}
+
 async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
   const { findIssue } = await import('./issues.ts');
   const { llmStats, resetLlmStats } = await import('./llm.ts');
@@ -485,8 +593,8 @@ function usage(): void {
   --engine <id>         单条问题走平台引擎全流程（真嵌套），打印 trace 与证据
   --plan-report         12 条全跑 code.plan（不调模型），体检检索命中率
   --no-llm              不调模型（契约用任务类型兜底），用于离线调试
-  --all                 （S6 起）跑全部 10 条
-  --ablation            （S6 起）跑 V1/V2/V3 消融`);
+  --all                 全量 10 条走引擎，落盘 public/results/results.json
+  --ablation            （S6b）跑 V1/V2/V3 消融`);
 }
 
 async function main(): Promise<number> {
@@ -496,6 +604,7 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--all')) return runAll();
   if (argv.includes('--engine')) {
     const i = argv.indexOf('--engine');
     const id = argv[i + 1];

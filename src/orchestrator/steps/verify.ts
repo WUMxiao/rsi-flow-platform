@@ -79,18 +79,21 @@ export function evidenceHit(answer: string, evidence: VerifyEvidence[]): boolean
   return evidence.some((e) => e.quote.toLowerCase().includes(a));
 }
 
-/** 从证据里按格式直接抽候选（免费） */
-export function candidatesFromEvidence(text: string, contract: Contract): string[] {
+/** 从证据里按格式直接抽候选（免费）；exclude 里的串是问题自带的，必须排除 */
+export function candidatesFromEvidence(text: string, contract: Contract, exclude: string[] = []): string[] {
   const out: string[] = [];
+  const skip = new Set(exclude.map((e) => e.toLowerCase().trim()));
   switch (contract.answerFormat) {
     case 'digit_string': {
       const nums = text.match(/\b\d{3,}\b/g) ?? [];
-      out.push(...nums);
+      out.push(...nums.filter((n) => !skip.has(n.toLowerCase())));
       break;
     }
     case 'uuid': {
-      const m = text.match(UUID_RE);
-      if (m) out.push(m[0]);
+      const all = text.match(new RegExp(UUID_RE.source, 'gi')) ?? [];
+      // kv_retrieval 的坑：证据块里同时有 key 和 value，而 key 就是问题里那个 UUID。
+      // 不排除问题自带的串，就会把 key 当成答案返回，并且"证据命中"校验还会通过 → 假阳性。
+      out.push(...all.filter((u) => !skip.has(u.toLowerCase())));
       break;
     }
     case 'choice_letter': {
@@ -102,6 +105,22 @@ export function candidatesFromEvidence(text: string, contract: Contract): string
       break;
   }
   return out;
+}
+
+/** 问题里自带的强标识串（UUID / 长数字），从候选里排除 */
+export function excludeFromQuestion(question: string): string[] {
+  const out: string[] = [];
+  out.push(...(question.match(new RegExp(UUID_RE.source, 'gi')) ?? []));
+  out.push(...(question.match(/\b\d{4,}\b/g) ?? []));
+  return out;
+}
+
+/** 短答去解释：`情侣（男朋友与女朋友）` → `情侣` */
+export function stripGloss(answer: string): string {
+  return answer
+    .replace(/[（(][^（）()]*[）)]\s*$/g, '')
+    .replace(/[—–-]{2,}[^—–]*$/g, '')
+    .trim();
 }
 
 interface LlmAnswer {
@@ -178,7 +197,8 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
 
   // 1) 规则抽取：证据里直接能拿到符合格式的串
   if (contract.answerFormat === 'digit_string' || contract.answerFormat === 'uuid' || contract.answerFormat === 'choice_letter') {
-    const cands = candidatesFromEvidence(evidenceText, contract);
+    const exclude = excludeFromQuestion(input.issue.input);
+    const cands = candidatesFromEvidence(evidenceText, contract, exclude);
     // 优先选同时出现在 drafts 里的那个
     const fromDraft = cands.find((c) => drafts.some((d) => d.includes(c)));
     const pick = fromDraft ?? cands[0];
@@ -198,7 +218,7 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
     attempts += 1;
     try {
       const { text } = await askModel(input, round === 1);
-      const answer = strip(text);
+      const answer = contract.answerFormat === 'short_entity' ? stripGloss(strip(text)) : strip(text);
       if (answer && formatOk(answer, contract)) {
         const hit = evidenceHit(answer, evidence);
         // 只有 mustCite 且证据确实命中，才算通过；否则标 no-evidence 但仍返回最佳答案
