@@ -15,6 +15,11 @@ export const MODEL = env.MODEL ?? 'gpt-6-sol';
 export const OPENAI_BASE_URL = env.OPENAI_BASE_URL ?? '';
 export const OPENAI_API_KEY = env.OPENAI_API_KEY ?? '';
 
+/** 切块与检索参数（做成 env 可调，S3 调参时不改代码） */
+export const CHUNK_SIZE = Number(env.CHUNK_SIZE ?? 4000);
+export const CHUNK_OVERLAP = Number(env.CHUNK_OVERLAP ?? 200);
+export const TOP_K = Number(env.TOP_K ?? 6);
+
 export const ISSUES_FILE = path.join(ROOT, 'data', 'issues.jsonl');
 export const RESULTS_DIR = path.join(ROOT, 'public', 'results');
 

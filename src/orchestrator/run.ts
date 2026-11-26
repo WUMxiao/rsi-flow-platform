@@ -250,8 +250,113 @@ async function selfTestValidator(): Promise<number> {
   return caught === cases.length && clean ? 0 : 1;
 }
 
+/** 检索体检：12 条全部跑 code.plan（不调模型），看候选块与命中率 */
+async function planReport(): Promise<number> {
+  const { loadIssues } = await import('./issues.ts');
+  const { hitRankTexts, softHitRank } = await import('./retrieve.ts');
+  const { planStep } = await import('./steps/plan.ts');
+
+  const issues = loadIssues();
+  console.log(`${pad('ID', 7)}${pad('TASK', 19)}${pad('CHUNKS', 8)}${pad('TOP', 6)}${pad('RANK', 6)}${pad('SOFT', 6)}${pad('MS', 7)}NOTE`);
+  console.log('-'.repeat(96));
+  let hit3 = 0;
+  let hit1 = 0;
+  let softHit = 0;
+
+  for (const issue of issues) {
+    const t0 = Date.now();
+    let rank = -1;
+    let soft = -1;
+    let chunkTotal = 0;
+    let selected = 0;
+    let note = '';
+    try {
+      const plan = await planStep({ issue, sampleId: issue.sampleId, runId: 'plan-report', useLlm: false });
+      const meta = plan.planMeta as any;
+      chunkTotal = Number(meta.chunkTotal ?? 0);
+      selected = plan.chunks.length;
+      const texts = plan.chunks.map((c) => c.text);
+      rank = hitRankTexts(texts, issue.gold, 3);
+      soft = softHitRank(texts, issue.gold, 3);
+      if (meta.fallback) note = `fallback=${meta.fallback}`;
+      if (issue.gold.every((g) => g.length < 2)) note = 'gold 太短，跳过硬判定';
+    } catch (err) {
+      note = err instanceof Error ? err.message : String(err);
+      rank = -2;
+    }
+    const ms = Date.now() - t0;
+    if (rank > 0) {
+      hit3 += 1;
+      if (rank === 1) hit1 += 1;
+    }
+    if (soft > 0) softHit += 1;
+    const rankText = rank === -1 ? 'n/a' : rank === 0 ? 'MISS' : rank === -2 ? 'ERR' : String(rank);
+    const softText = soft === -1 ? 'n/a' : soft === 0 ? '-' : `~${soft}`;
+    console.log(
+      `${pad(issue.id, 7)}${pad(issue.task, 19)}${pad(String(chunkTotal), 8)}${pad(String(selected), 6)}${pad(rankText, 6)}${pad(softText, 6)}${pad(String(ms), 7)}${note}`,
+    );
+  }
+
+  console.log(`\n硬命中（gold 逐字出现在前 3 块）：${hit3}/${issues.length}，其中第 1 名 ${hit1} 条`);
+  console.log(`软命中（gold 里的长词出现在前 3 块）：${softHit}/${issues.length}`);
+  return 0;
+}
+
+async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
+  const { findIssue } = await import('./issues.ts');
+  const { llmStats, resetLlmStats } = await import('./llm.ts');
+  const { hitRankTexts } = await import('./retrieve.ts');
+  const { planStep } = await import('./steps/plan.ts');
+  const { preview } = await import('./chunk.ts');
+
+  const issue = findIssue(id);
+  resetLlmStats();
+  const t0 = Date.now();
+
+  const plan = await planStep({
+    issue,
+    sampleId: issue.sampleId,
+    runId: `cli-${t0}`,
+    useLlm: !opts.noLlm,
+  });
+  const elapsed = Date.now() - t0;
+  const stats = llmStats();
+  const rank = hitRankTexts(plan.chunks.map((c) => c.text), issue.gold, 3);
+
+  console.log(`issue   ${issue.id}  ${issue.task} #${issue.sampleId}  ctx=${issue.ctxChars} chars  failure=${issue.failureType}`);
+  console.log(`chunks  ${String((plan.planMeta as any).chunkTotal)} 块 × ${String((plan.planMeta as any).chunkSize)} 字符 → 选出 ${plan.chunks.length} 块`);
+  console.log(`terms   anchors=${JSON.stringify((plan.planMeta as any).anchors)}`);
+  console.log(`        keywords=${JSON.stringify(plan.keywords.slice(0, 12))}`);
+  console.log(`contract ${JSON.stringify(plan.contract)}`);
+  console.log('\n候选块：');
+  plan.chunks.forEach((c, i) => {
+    const hit = issue.gold.some((g) => g.length >= 2 && c.text.includes(g)) ? ' ← 含 gold' : '';
+    console.log(`  #${i + 1}  ${pad(c.id, 6)} score=${pad(String(c.score), 7)} [${c.start}-${c.end}]${hit}`);
+    console.log(`        ${preview(c.text, 120)}`);
+  });
+
+  console.log(`\ngold ${JSON.stringify(issue.gold)} 在前 3 块中的排名: ${rank === -1 ? '无（gold 太短，跳过）' : rank === 0 ? '未命中' : rank}`);
+  console.log(`llm    ${stats.calls} 次调用  prompt ${stats.promptTokens} / completion ${stats.completionTokens} token，失败 ${stats.failures} 次`);
+  console.log(`耗时   ${(elapsed / 1000).toFixed(1)}s`);
+
+  const checks: Array<[string, boolean]> = [
+    ['候选块数 ≤ 8', plan.chunks.length > 0 && plan.chunks.length <= 8],
+    ['gold 出现在前 3 块', rank > 0],
+    ['契约格式已确定', Boolean(plan.contract.answerFormat)],
+  ];
+  console.log('\n=== 断言 ===');
+  for (const [name, ok] of checks) console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}`);
+
+  if (!opts.dry) {
+    console.log('\n（S4 起：--issue 会继续跑 read/verify，当前仅完成 plan）');
+  }
+  return checks.every(([, ok]) => ok) ? 0 : 1;
+}
+
 async function smoke(stopAfterRead: boolean): Promise<number> {
   const { runOrchestration } = await import('./bootstrap.ts');
+  // 结构自检必须零模型调用：离线开关交给 code.plan
+  process.env.ORCHESTRATE_OFFLINE = '1';
 
   console.log('=== 结构（静态，来自 FlowConfig）===');
   printStructure(FLOWS as Record<string, any>, 'orchestration.main', 0, '');
@@ -311,7 +416,10 @@ function usage(): void {
   --selftest-validator  反向测试：故意破坏结构，确认校验器能抓
   --smoke-nest          空跑三层嵌套，打印结构与 trace
   --smoke-stop          空跑 + 跨层 stop，确认子流程能终止父流程
-  --issue <id>          （S3 起）跑单条问题
+  --issue <id>          跑单条问题（S3 阶段只到 plan；加 --dry-plan 只看候选块）
+  --dry-plan            只跑 code.plan，打印候选块与契约
+  --plan-report         12 条全跑 code.plan（不调模型），体检检索命中率
+  --no-llm              不调模型（契约用任务类型兜底），用于离线调试
   --all                 （S6 起）跑全部 10 条
   --ablation            （S6 起）跑 V1/V2/V3 消融`);
 }
@@ -323,9 +431,15 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--plan-report')) return planReport();
   if (argv.includes('--issue')) {
-    console.error('--issue 尚未实现（S3）');
-    return 2;
+    const i = argv.indexOf('--issue');
+    const id = argv[i + 1];
+    if (!id || id.startsWith('--')) {
+      console.error('--issue 需要一个 id，例如：--issue IB-06');
+      return 2;
+    }
+    return runIssue(id, { dry: argv.includes('--dry-plan'), noLlm: argv.includes('--no-llm') });
   }
   usage();
   return 0;

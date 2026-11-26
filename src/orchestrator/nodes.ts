@@ -2,6 +2,8 @@
 // S3–S5 会把 code.plan / code.read / code.verify 的真身填进来，函数签名不变。
 import flowPkg from '@horsecoder/flow';
 
+import { planStep } from './steps/plan.ts';
+
 const { stop } = flowPkg as unknown as {
   stop: (flowId: string, args: Record<string, unknown>) => Promise<unknown>;
 };
@@ -9,19 +11,16 @@ const { stop } = flowPkg as unknown as {
 export type NodeFn = (input: Record<string, any>) => Promise<Record<string, unknown>>;
 
 export const NODES: Record<string, NodeFn> = {
-  // S3 会换成：切块 + 本地检索 + 一次 LLM 调用生成契约
+  // 切块 + 本地检索 + 一次契约生成（1 次模型调用）
   'code.plan': async (input) => {
-    const chunks = [
-      { id: 'c0', start: 0, end: 4000, text: 'STUB chunk 0' },
-      { id: 'c1', start: 4000, end: 8000, text: 'STUB chunk 1' },
-      { id: 'c2', start: 8000, end: 12000, text: 'STUB chunk 2' },
-    ];
-    return {
-      chunks,
-      contract: { answerFormat: 'digit_string', mustCite: true, keywords: ['pass key'], maxChars: 32 },
-      keywords: ['pass key', 'passkey'],
-      planMeta: { traceId: input.runId, chunkCount: chunks.length, retrieved: 3 },
-    };
+    const offline = process.env.ORCHESTRATE_OFFLINE === '1';
+    const out = await planStep({
+      issue: input.issue,
+      sampleId: String(input.sampleId),
+      runId: String(input.runId ?? ''),
+      useLlm: input.useLlm ?? !offline,
+    });
+    return out as unknown as Record<string, unknown>;
   },
 
   // S4 会换成：批量喂块精读 + Promise.all 扇出
