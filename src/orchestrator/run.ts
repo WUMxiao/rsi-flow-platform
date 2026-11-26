@@ -702,6 +702,61 @@ async function rescore(tag: string): Promise<number> {
   return 0;
 }
 
+/**
+ * autogen 演示：让模型只根据 manifest 生成一个 FlowConfig，然后过 L1 静态校验。
+ * 目的不是生成能跑的结构，而是验证"铺路"是否成立：动作空间可读、约束能判死。
+ */
+async function autogenDemo(): Promise<number> {
+  const { MANIFEST } = await import('./manifest.ts');
+  const { chat, parseJsonLoose } = await import('./llm.ts');
+  const { formatIssues, hasError, validateFlow } = await import('./validate.ts');
+  const { FLOWS } = await import('../flows/flows_my.ts');
+
+  const menu = MANIFEST.map(
+    (s) => `- ${s.codeId}: 入参[${s.params.map((p) => p.name).join(',')}] 出参[${s.results.map((r) => r.name).join(',')}] ${s.desc}`,
+  ).join('\n');
+
+  const instruction = [
+    '你是流程编排器。可用的节点实现如下：',
+    menu,
+    '',
+    '场景：单条长文问答，答案是一个唯一字符串（密钥/编号/UUID）。',
+    '请输出一个 FlowConfig（只输出 JSON）：',
+    '{"id":"orchestration.auto","title":"...","type":"flow","platform":"frontend","async":false,',
+    '"params":[{"name":"issue","type":"any"},{"name":"sampleId","type":"string"},{"name":"runId","type":"string"}],',
+    '"results":[{"name":"finalAnswer","type":"any"}],',
+    '"nodes":[{"id":"plan","type":"event","title":"...","reference":"code.plan","params":[...],"results":[...]}],',
+    '"routes":[{"source":"start","target":"plan"},{"source":"plan","target":"end"}]}',
+    '',
+    '硬约束：reference 只能用上面列出的 codeId；路由端点只能是节点 id 或 start/end；params/results 必须显式声明且与节点签名一致。',
+  ].join('\n');
+
+  console.log('=== 输入（manifest 摘要）===');
+  console.log(menu);
+  const res = await chat(
+    [
+      { role: 'system', content: '只输出 JSON，不要解释。' },
+      { role: 'user', content: instruction },
+    ],
+    { maxTokens: 1200, temperature: 0 },
+  );
+  const cfg = parseJsonLoose<any>(res.text);
+  console.log(`\n=== 模型输出（${res.usage.promptTokens + res.usage.completionTokens} token，${res.latencyMs}ms）===`);
+  console.log(JSON.stringify(cfg, null, 2));
+
+  if (!cfg) {
+    console.log('\nL1 校验：无法解析 JSON → 判死');
+    return 1;
+  }
+
+  const issues = validateFlow('orchestration.auto', cfg, { ...(FLOWS as any), 'orchestration.auto': cfg });
+  console.log('\n=== L1 静态校验 ===');
+  console.log(formatIssues(issues));
+  const dead = hasError(issues);
+  console.log(`\n结论：${dead ? '判死（存在 error）' : '通过 L1'}`);
+  return dead ? 0 : 0;
+}
+
 async function runIssue(id: string, opts: { dry: boolean; noLlm: boolean }): Promise<number> {
   const { findIssue } = await import('./issues.ts');
   const { llmStats, resetLlmStats } = await import('./llm.ts');
@@ -832,6 +887,7 @@ async function main(): Promise<number> {
   if (argv.includes('--selftest-validator')) return selfTestValidator();
   if (argv.includes('--smoke-nest')) return smoke(false);
   if (argv.includes('--smoke-stop')) return smoke(true);
+  if (argv.includes('--autogen-demo')) return autogenDemo();
   if (argv.includes('--rescore')) {
     const i = argv.indexOf('--rescore');
     return rescore(String(argv[i + 1] ?? ''));
