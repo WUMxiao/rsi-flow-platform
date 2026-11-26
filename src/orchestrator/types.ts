@@ -62,6 +62,7 @@ export interface Contract {
 
 /** 逐节点执行轨迹（S2 起写入，S7 页面读它着色） */
 export interface TraceEntry {
+  runId: string;
   flowId: string;
   nodeId: string;
   depth: number;
