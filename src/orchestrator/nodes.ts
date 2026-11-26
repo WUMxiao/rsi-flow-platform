@@ -13,14 +13,13 @@ const { stop } = flowPkg as unknown as {
 export type NodeFn = (input: Record<string, any>) => Promise<Record<string, unknown>>;
 
 export const NODES: Record<string, NodeFn> = {
-  // 切块 + 本地检索 + 一次契约生成（1 次模型调用）
+  // 切块 + 本地检索 + 契约（契约默认走规则；PLAN_LLM=1 可切回模型）
   'code.plan': async (input) => {
-    const offline = process.env.ORCHESTRATE_OFFLINE === '1';
     const out = await planStep({
       issue: input.issue,
       sampleId: String(input.sampleId),
       runId: String(input.runId ?? ''),
-      useLlm: input.useLlm ?? !offline,
+      useLlm: input.useLlm,
     });
     return out as unknown as Record<string, unknown>;
   },

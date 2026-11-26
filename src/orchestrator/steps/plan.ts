@@ -70,7 +70,10 @@ export interface PlanOutput {
 
 export async function planStep(input: PlanInput): Promise<PlanOutput> {
   const { issue, sampleId, runId } = input;
-  const useLlm = input.useLlm !== false;
+  // 契约默认由本地规则产出（heuristicContract + 任务白名单）。
+  // 实测这一次 LLM 调用只为定 answer_format/关键词，却占单条时延的 30–40%；
+  // 需要复现旧行为时用 PLAN_LLM=1。
+  const useLlm = input.useLlm === true || process.env.PLAN_LLM === '1';
 
   const samples = await loadSamples(issue.task, [sampleId]);
   const sample = samples.get(String(sampleId));

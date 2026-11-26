@@ -236,8 +236,8 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
     if (cands.length) notes.push(`规则抽到 ${cands.length} 个候选但未通过校验`);
   }
 
-  // 2) 模型兜底（最多 2 次：一次常规、一次严格格式）
-  for (let round = 0; round < 2; round += 1) {
+  // 2) 模型兜底（1 次；实测第二次重试极少翻盘，却要多付 20–40s）
+  for (let round = 0; round < 1; round += 1) {
     attempts += 1;
     try {
       const { text } = await askModel(input, round === 1);

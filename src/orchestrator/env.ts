@@ -20,8 +20,9 @@ export const CHUNK_SIZE = Number(env.CHUNK_SIZE ?? 4000);
 export const CHUNK_OVERLAP = Number(env.CHUNK_OVERLAP ?? 200);
 export const TOP_K = Number(env.TOP_K ?? 5);
 
-/** 读取层参数：一次调用塞几块（对抗 ~36s 延迟和 10k token 固定开销） */
-export const READ_BATCH = Number(env.READ_BATCH ?? 4);
+/** 读取层参数：一次调用塞几块（对抗单次 20–40s 延迟和 10k token 固定开销）
+ *  8 块 → 6 个候选块一次读完，省一次往返 */
+export const READ_BATCH = Number(env.READ_BATCH ?? 8);
 export const READ_MAX_TOKENS = Number(env.READ_MAX_TOKENS ?? 500);
 
 /** 全文分片（map-reduce 升级路径）：片大小与片数上限共同决定单条预算 */

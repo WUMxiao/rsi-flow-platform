@@ -1,5 +1,7 @@
 // 模型网关。只做一件事：一次 chat 调用 + 用量统计 + 失败重试。
 // 不做重试策略、不做预算控制 —— 那些属于节点内部逻辑（S5）。
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import { MODEL, requireModelCredentials } from './env.ts';
 
 export interface Usage {
@@ -22,6 +24,28 @@ const stats = {
   cachedTokens: 0,
   failures: 0,
 };
+
+type Stats = typeof stats;
+
+/**
+ * 并发批跑时，进程级全局计数会把 A 题的 token 记到 B 题上。
+ * 用 AsyncLocalStorage 给每次 run 单独一份计数（并发安全）。
+ */
+const statsStore = new AsyncLocalStorage<Stats>();
+
+function activeStats(): Stats {
+  return statsStore.getStore() ?? stats;
+}
+
+/** 在独立计数域里跑一次编排；域内 chat() 的用量只记到这一次 */
+export async function runWithStats<T>(fn: () => Promise<T>): Promise<T> {
+  return statsStore.run({ calls: 0, promptTokens: 0, completionTokens: 0, cachedTokens: 0, failures: 0 }, fn);
+}
+
+/** 取当前计数域的累计值（需在 runWithStats 的回调内调用） */
+export function currentStats(): Stats {
+  return { ...activeStats() };
+}
 
 export function llmStats() {
   return { ...stats };
@@ -65,7 +89,7 @@ export async function chat(
         method: 'POST',
         headers: { 'content-type': 'application/json', authorization: `Bearer ${apiKey}` },
         body: JSON.stringify(body),
-        signal: AbortSignal.timeout(opts.timeoutMs ?? 120_000),
+        signal: AbortSignal.timeout(opts.timeoutMs ?? 60_000),
       });
       if (!res.ok) {
         const detail = (await res.text()).slice(0, 200);
@@ -83,14 +107,15 @@ export async function chat(
         latencyMs: Date.now() - t0,
         model: String(json?.model ?? MODEL),
       };
-      stats.calls += 1;
-      stats.promptTokens += out.usage.promptTokens;
-      stats.completionTokens += out.usage.completionTokens;
-      stats.cachedTokens += out.usage.cachedTokens;
+      const s = activeStats();
+      s.calls += 1;
+      s.promptTokens += out.usage.promptTokens;
+      s.completionTokens += out.usage.completionTokens;
+      s.cachedTokens += out.usage.cachedTokens;
       return out;
     } catch (err) {
       lastErr = err;
-      stats.failures += 1;
+      activeStats().failures += 1;
       if (i < attempts - 1) await new Promise((r) => setTimeout(r, 1200 * (i + 1)));
     }
   }

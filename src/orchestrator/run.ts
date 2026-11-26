@@ -381,7 +381,7 @@ async function runEngine(id: string): Promise<number> {
 /** 全量 10 条：走引擎跑完，落盘 public/results/results.json */
 async function runAll(): Promise<number> {
   const { mainIssues } = await import('./issues.ts');
-  const { llmStats, resetLlmStats } = await import('./llm.ts');
+  const { currentStats, runWithStats } = await import('./llm.ts');
   const { runOrchestration } = await import('./bootstrap.ts');
   const { verdict } = await import('./score.ts');
   const { RESULTS_DIR } = await import('./env.ts');
@@ -401,35 +401,45 @@ async function runAll(): Promise<number> {
   const tag = tagIdx >= 0 ? String(process.argv[tagIdx + 1] ?? '') : '';
   const outFile = path.join(RESULTS_DIR, tag ? `results.${tag}.json` : 'results.json');
 
-  // 结果按 id 累积写入：部分重跑时保留其他条目，避免整份文件被冲掉
+  // 结果按 id 累积写入：部分重跑时保留其他条目，避免整份文件被冲掉。
+  // 并发下写入必须串行，否则后完成的旧快照会覆盖新数据。
   const priorRows: any[] = fs.existsSync(outFile) ? ((JSON.parse(fs.readFileSync(outFile, 'utf8')) as any).rows ?? []) : [];
   const store = new Map<string, any>(priorRows.map((r: any) => [r.id, r]));
-  const writeStore = () => {
+  let writeChain: Promise<void> = Promise.resolve();
+  const writeStore = (): Promise<void> => {
     const merged = allIssues.map((i) => store.get(i.id)).filter(Boolean);
-    fs.writeFileSync(outFile, JSON.stringify({ generatedAt: new Date().toISOString(), rows: merged }, null, 2), 'utf8');
+    const payload = JSON.stringify({ generatedAt: new Date().toISOString(), rows: merged }, null, 2);
+    writeChain = writeChain.then(() => fs.promises.writeFile(outFile, payload, 'utf8'));
+    return writeChain;
   };
 
-  for (let i = 0; i < issues.length; i += 1) {
-    const issue = issues[i];
-    resetLlmStats();
+  const concurrency = Math.max(1, Math.min(Number(process.env.CONCURRENCY ?? 4), issues.length));
+  console.log(`并发 ${concurrency} 路，共 ${issues.length} 条`);
+
+  const runOne = async (issue: any, seq: number): Promise<void> => {
     const t0 = Date.now();
     let result: Record<string, unknown> = {};
     let trace: any[] = [];
     let fatal = '';
+    let stats = { calls: 0, promptTokens: 0, completionTokens: 0, cachedTokens: 0, failures: 0 };
     try {
-      const r = await runOrchestration({
-        issue,
-        sampleId: issue.sampleId,
-        runId: `all-${t0}-${issue.id}`,
-        traceId: `T-${issue.id}`,
-        stopAfterRead: false,
+      // 每次 run 独立计数域：并发时不会把 A 题的 token 记到 B 题上
+      await runWithStats(async () => {
+        const r = await runOrchestration({
+          issue,
+          sampleId: issue.sampleId,
+          runId: `all-${t0}-${issue.id}`,
+          traceId: `T-${issue.id}`,
+          stopAfterRead: false,
+        });
+        result = r.result;
+        trace = r.trace;
+        stats = currentStats();
       });
-      result = r.result;
-      trace = r.trace;
     } catch (err) {
       fatal = err instanceof Error ? err.message : String(err);
+      stats = currentStats();
     }
-    const stats = llmStats();
     calls += stats.calls;
     promptTokens += stats.promptTokens;
     completionTokens += stats.completionTokens;
@@ -444,9 +454,12 @@ async function runAll(): Promise<number> {
       failureType: issue.failureType,
       gold: issue.gold,
       answer,
+      /** 契约通过：格式合规 + 答案能在证据里找到。**不等于答对**，只用于内部调试 */
       verdict: result.verdict ?? { pass: false, reason: fatal ? 'fatal' : 'missing' },
-      autoPass: v.pass,
-      autoReason: v.reason,
+      contractPass: Boolean((result.verdict as any)?.pass),
+      /** 与 gold 严格比对 —— 页面、文档、汇报只认这个 */
+      strictPass: v.pass,
+      strictReason: v.reason,
       baseline: issue.baseline,
       ctxChars: issue.ctxChars,
       ms: Date.now() - t0,
@@ -455,17 +468,34 @@ async function runAll(): Promise<number> {
       completionTokens: stats.completionTokens,
       evidenceCount: evidence.length,
       verifiedCount: evidence.filter((e) => e && e.verified).length,
+      evidence: evidence.slice(0, 8).map((e: any) => ({
+        chunkId: String(e?.chunkId ?? ''),
+        quote: String(e?.quote ?? '').slice(0, 200),
+        verified: Boolean(e?.verified),
+      })),
       trace,
       error: fatal,
     };
     store.set(issue.id, row);
-    writeStore();
+    await writeStore();
 
     console.log(
-      `[${i + 1}/${issues.length}] ${pad(issue.id, 6)} ${pad(issue.task, 18)} ans=${JSON.stringify(answer).slice(0, 26)} ` +
-        `auto=${row.autoPass ? 'PASS' : 'miss'} base=${issue.baseline.score} calls=${stats.calls} ${(row.ms / 1000).toFixed(0)}s`,
+      `[${seq}/${issues.length}] ${pad(issue.id, 6)} ${pad(issue.task, 18)} ans=${JSON.stringify(answer).slice(0, 26)} ` +
+        `strict=${row.strictPass ? 'PASS' : 'miss'} contract=${row.contractPass ? 'ok' : 'no'} calls=${stats.calls} ${(row.ms / 1000).toFixed(0)}s`,
     );
-  }
+  };
+
+  let cursor = 0;
+  const workers = Array.from({ length: concurrency }, async () => {
+    for (;;) {
+      const i = cursor;
+      cursor += 1;
+      if (i >= issues.length) return;
+      await runOne(issues[i], i + 1);
+    }
+  });
+  await Promise.all(workers);
+  await writeChain;
 
   const finalRows = allIssues.map((i) => store.get(i.id)).filter(Boolean);
 
@@ -474,11 +504,11 @@ async function runAll(): Promise<number> {
   console.log('-'.repeat(110));
   for (const r of finalRows) {
     console.log(
-      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(String(r.baseline.raw).replace(/\s+/g, ' ').slice(0, 28), 30)}${pad(String(r.answer).replace(/\s+/g, ' ').slice(0, 24), 26)}${pad(r.autoPass ? 'PASS' : 'miss', 7)}${pad(String(r.calls), 6)}${Math.round(r.ms / 1000)}`,
+      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(String(r.baseline.raw).replace(/\s+/g, ' ').slice(0, 28), 30)}${pad(String(r.answer).replace(/\s+/g, ' ').slice(0, 24), 26)}${pad(r.strictPass ? 'PASS' : 'miss', 7)}${pad(String(r.calls), 6)}${Math.round(r.ms / 1000)}`,
     );
   }
 
-  const pass = finalRows.filter((r: any) => r.autoPass).length;
+  const pass = finalRows.filter((r: any) => r.strictPass).length;
   const basePass = finalRows.filter((r: any) => r.baseline.score >= 0.5).length;
   console.log(`\n自动判定：修复后 ${pass}/${finalRows.length} 通过，基线（官方分 ≥0.5）${basePass}/${finalRows.length}`);
   console.log(`本轮调用 ${calls} 次${only.length ? `（仅重跑 ${only.join(',')}）` : ''}，prompt ${promptTokens} / completion ${completionTokens} token，耗时 ${((Date.now() - startedAll) / 60000).toFixed(1)} 分钟`);
@@ -531,7 +561,7 @@ async function runAblation(): Promise<number> {
       task: issue.task,
       gold: issue.gold,
       answer,
-      autoPass: v.pass,
+      strictPass: v.pass,
       autoReason: v.reason,
       ms: Date.now() - s,
       calls: stats.calls,
@@ -558,10 +588,10 @@ async function runAblation(): Promise<number> {
   let v3pass = 0;
   for (const r of rows) {
     const m = mainRows.find((x) => x.id === r.id);
-    if (r.autoPass) v2pass += 1;
-    if (m?.autoPass) v3pass += 1;
+    if (r.strictPass) v2pass += 1;
+    if (m?.strictPass) v3pass += 1;
     console.log(
-      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(`${r.autoPass ? 'PASS' : 'miss'} ${String(r.answer).slice(0, 14)}`, 24)}${pad(`${m ? (m.autoPass ? 'PASS' : 'miss') : '-'} ${String(m?.answer ?? '').slice(0, 14)}`, 24)}${m ? (m.autoPass === r.autoPass ? '' : '≠') : ''}`,
+      `${pad(r.id, 7)}${pad(r.task, 19)}${pad(`${r.strictPass ? 'PASS' : 'miss'} ${String(r.answer).slice(0, 14)}`, 24)}${pad(`${m ? (m.strictPass ? 'PASS' : 'miss') : '-'} ${String(m?.answer ?? '').slice(0, 14)}`, 24)}${m ? (m.strictPass === r.strictPass ? '' : '≠') : ''}`,
     );
   }
   console.log(`\n两层 ${v2pass}/${rows.length} 通过，三层 ${v3pass}/${rows.length} 通过`);
