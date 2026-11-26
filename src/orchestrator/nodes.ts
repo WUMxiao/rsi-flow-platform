@@ -39,6 +39,7 @@ export const NODES: Record<string, NodeFn> = {
       chunks: input.chunks ?? [],
       contract: input.contract,
       question: String(input.issue?.input ?? ''),
+      issue: input.issue ? { task: String(input.issue.task), sampleId: String(input.issue.sampleId) } : undefined,
     });
     return out as unknown as Record<string, unknown>;
   },

@@ -1,6 +1,6 @@
 // code.plan：切块 + 本地检索 + 一次契约生成。
 // 这里只花 1 次模型调用（扩展检索词/定输出格式），检索本身是纯本地的。
-import { chunkText } from '../chunk.ts';
+import { chunkByStructure, chunkText } from '../chunk.ts';
 import { loadSamples } from '../dataset.ts';
 import { CHUNK_OVERLAP, CHUNK_SIZE, TOP_K } from '../env.ts';
 import { chat, parseJsonLoose } from '../llm.ts';
@@ -11,7 +11,7 @@ const FORMAT_BY_TASK: Record<string, Contract['answerFormat']> = {
   passkey: 'digit_string',
   number_string: 'digit_string',
   kv_retrieval: 'uuid',
-  code_debug: 'choice_letter',
+  code_debug: 'short_entity',
   longbook_choice_eng: 'choice_letter',
   longbook_qa_chn: 'short_entity',
   longbook_qa_eng: 'short_entity',
@@ -37,7 +37,7 @@ const ALLOWED_BY_TASK: Record<string, Contract['answerFormat'][]> = {
   passkey: ['digit_string'],
   number_string: ['digit_string'],
   kv_retrieval: ['uuid'],
-  code_debug: ['choice_letter'],
+  code_debug: ['short_entity', 'choice_letter'],
   longbook_choice_eng: ['choice_letter'],
   // 长文书问答的答案几乎都是短实体（人名/称谓/数字词），不允许退化成 digit_string：
   // "How old is Felicity..." 的答案是 Thirty，被判成 digit_string 会让契约核验直接判死。
@@ -76,7 +76,9 @@ export async function planStep(input: PlanInput): Promise<PlanOutput> {
   const sample = samples.get(String(sampleId));
   if (!sample) throw new Error(`取不到样本 ${issue.task}#${sampleId}`);
 
-  const all = chunkText(sample.context, CHUNK_SIZE, CHUNK_OVERLAP);
+  // 代码类按函数/类边界切块，其余按固定窗口
+  const isCode = issue.task === 'code_debug' || issue.task === 'code_run';
+  const all = isCode ? chunkByStructure(sample.context, CHUNK_SIZE) : chunkText(sample.context, CHUNK_SIZE, CHUNK_OVERLAP);
   // options 必须一起进检索词：code_debug / 选择题的选项里往往才是真正的定位线索
   const questionText = [sample.input, ...(sample.options ?? [])].join('\n');
   const { anchors, terms } = extractTerms(questionText);

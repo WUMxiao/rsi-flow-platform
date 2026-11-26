@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-26T13:20:11.717Z",
+  "generatedAt": "2026-11-26T13:46:03.459Z",
   "rows": [
     {
       "id": "IB-01",
@@ -720,17 +720,17 @@
       "gold": [
         "a3fa5e4c-705c-4fad-bb48-b37a21f437cc"
       ],
-      "answer": "a3fa5e4c-705",
+      "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
       "verdict": {
-        "pass": false,
-        "reason": "no-evidence",
+        "pass": true,
+        "reason": "rule",
         "format": "uuid",
-        "evidenceHit": false,
-        "attempts": 2,
-        "note": "规则抽到 1 个候选但未通过校验; 第 1 次答案「a3fa5e4c-705」不合格式; 第 2 次答案「a3fa5e4c-705c-4fad-bb48-b37a21」不合格式"
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
       },
-      "autoPass": false,
-      "autoReason": "miss",
+      "autoPass": true,
+      "autoReason": "exact",
       "baseline": {
         "model": "gpt-6-sol",
         "raw": "a3fa5e4c-705c-4fad-bb48-b37a21f437c",
@@ -740,19 +740,19 @@
         "completionTokens": 123
       },
       "ctxChars": 200011,
-      "ms": 65982,
-      "calls": 4,
-      "promptTokens": 26574,
-      "completionTokens": 691,
+      "ms": 38823,
+      "calls": 2,
+      "promptTokens": 11548,
+      "completionTokens": 285,
       "evidenceCount": 1,
       "verifiedCount": 1,
       "trace": [
         {
-          "runId": "all-1795697574988-IB-08",
+          "runId": "all-1795700487989-IB-08",
           "flowId": "orchestration.main",
           "nodeId": "code.plan",
           "depth": 1,
-          "startedAt": 1795697574988,
+          "startedAt": 1795700487989,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -765,14 +765,14 @@
             "keywords",
             "planMeta"
           ],
-          "endedAt": 1795697590181
+          "endedAt": 1795700503882
         },
         {
-          "runId": "all-1795697574988-IB-08",
+          "runId": "all-1795700487989-IB-08",
           "flowId": "orchestration.read",
           "nodeId": "code.read",
           "depth": 2,
-          "startedAt": 1795697590181,
+          "startedAt": 1795700503882,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -787,14 +787,14 @@
             "readTokens",
             "drafts"
           ],
-          "endedAt": 1795697597758
+          "endedAt": 1795700526811
         },
         {
-          "runId": "all-1795697574988-IB-08",
+          "runId": "all-1795700487989-IB-08",
           "flowId": "orchestration.verify",
           "nodeId": "code.verify",
           "depth": 2,
-          "startedAt": 1795697597758,
+          "startedAt": 1795700526811,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -808,7 +808,7 @@
             "verdict",
             "retries"
           ],
-          "endedAt": 1795697640970
+          "endedAt": 1795700526812
         }
       ],
       "error": ""
@@ -922,14 +922,14 @@
       "gold": [
         "_init"
       ],
-      "answer": "print_options",
+      "answer": "_test",
       "verdict": {
-        "pass": false,
-        "reason": "no-evidence",
-        "format": "choice_letter",
-        "evidenceHit": false,
-        "attempts": 2,
-        "note": "第 1 次答案「B」格式合规但证据里找不到; 第 2 次答案「」不合格式"
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
       },
       "autoPass": false,
       "autoReason": "miss",
@@ -942,19 +942,19 @@
         "completionTokens": 101
       },
       "ctxChars": 807189,
-      "ms": 104616,
-      "calls": 5,
-      "promptTokens": 32951,
-      "completionTokens": 771,
-      "evidenceCount": 2,
-      "verifiedCount": 2,
+      "ms": 106958,
+      "calls": 4,
+      "promptTokens": 68683,
+      "completionTokens": 574,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
       "trace": [
         {
-          "runId": "all-1795697904499-IB-10",
+          "runId": "all-1795700526815-IB-10",
           "flowId": "orchestration.main",
           "nodeId": "code.plan",
           "depth": 1,
-          "startedAt": 1795697904499,
+          "startedAt": 1795700526815,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -967,14 +967,14 @@
             "keywords",
             "planMeta"
           ],
-          "endedAt": 1795697918206
+          "endedAt": 1795700532879
         },
         {
-          "runId": "all-1795697904499-IB-10",
+          "runId": "all-1795700526815-IB-10",
           "flowId": "orchestration.read",
           "nodeId": "code.read",
           "depth": 2,
-          "startedAt": 1795697918206,
+          "startedAt": 1795700532879,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -989,14 +989,14 @@
             "readTokens",
             "drafts"
           ],
-          "endedAt": 1795697957440
+          "endedAt": 1795700611189
         },
         {
-          "runId": "all-1795697904499-IB-10",
+          "runId": "all-1795700526815-IB-10",
           "flowId": "orchestration.verify",
           "nodeId": "code.verify",
           "depth": 2,
-          "startedAt": 1795697957440,
+          "startedAt": 1795700611189,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -1010,7 +1010,7 @@
             "verdict",
             "retries"
           ],
-          "endedAt": 1795698009115
+          "endedAt": 1795700633773
         }
       ],
       "error": ""
@@ -2852,14 +2852,14 @@
       "gold": [
         "Input._do_read"
       ],
-      "answer": "send",
+      "answer": "recvfrom",
       "verdict": {
-        "pass": false,
-        "reason": "no-evidence",
-        "format": "choice_letter",
-        "evidenceHit": false,
-        "attempts": 2,
-        "note": "第 1 次答案「A」格式合规但证据里找不到; 第 2 次答案「」不合格式"
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
       },
       "autoPass": false,
       "autoReason": "miss",
@@ -2872,19 +2872,19 @@
         "completionTokens": 101
       },
       "ctxChars": 693285,
-      "ms": 71598,
-      "calls": 5,
-      "promptTokens": 28358,
-      "completionTokens": 454,
-      "evidenceCount": 1,
-      "verifiedCount": 1,
+      "ms": 54659,
+      "calls": 4,
+      "promptTokens": 25278,
+      "completionTokens": 850,
+      "evidenceCount": 2,
+      "verifiedCount": 2,
       "trace": [
         {
-          "runId": "all-1795698961641-IB-29",
+          "runId": "all-1795700633774-IB-29",
           "flowId": "orchestration.main",
           "nodeId": "code.plan",
           "depth": 1,
-          "startedAt": 1795698961641,
+          "startedAt": 1795700633774,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -2897,14 +2897,14 @@
             "keywords",
             "planMeta"
           ],
-          "endedAt": 1795698977526
+          "endedAt": 1795700637872
         },
         {
-          "runId": "all-1795698961641-IB-29",
+          "runId": "all-1795700633774-IB-29",
           "flowId": "orchestration.read",
           "nodeId": "code.read",
           "depth": 2,
-          "startedAt": 1795698977526,
+          "startedAt": 1795700637872,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -2919,14 +2919,14 @@
             "readTokens",
             "drafts"
           ],
-          "endedAt": 1795699007956
+          "endedAt": 1795700684437
         },
         {
-          "runId": "all-1795698961641-IB-29",
+          "runId": "all-1795700633774-IB-29",
           "flowId": "orchestration.verify",
           "nodeId": "code.verify",
           "depth": 2,
-          "startedAt": 1795699007956,
+          "startedAt": 1795700684437,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -2940,7 +2940,7 @@
             "verdict",
             "retries"
           ],
-          "endedAt": 1795699033239
+          "endedAt": 1795700688433
         }
       ],
       "error": ""
@@ -2953,14 +2953,14 @@
       "gold": [
         "RemoteLink.moveIntf"
       ],
-      "answer": "linearBandwidthTest",
+      "answer": "startShell",
       "verdict": {
-        "pass": false,
-        "reason": "no-evidence",
-        "format": "choice_letter",
-        "evidenceHit": false,
-        "attempts": 2,
-        "note": "第 1 次答案「B」格式合规但证据里找不到; 第 2 次答案「」不合格式"
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
       },
       "autoPass": false,
       "autoReason": "miss",
@@ -2973,19 +2973,19 @@
         "completionTokens": 101
       },
       "ctxChars": 476780,
-      "ms": 178477,
-      "calls": 5,
-      "promptTokens": 35202,
-      "completionTokens": 1112,
+      "ms": 75025,
+      "calls": 4,
+      "promptTokens": 32020,
+      "completionTokens": 1040,
       "evidenceCount": 2,
       "verifiedCount": 2,
       "trace": [
         {
-          "runId": "all-1795699033240-IB-30",
+          "runId": "all-1795700688434-IB-30",
           "flowId": "orchestration.main",
           "nodeId": "code.plan",
           "depth": 1,
-          "startedAt": 1795699033240,
+          "startedAt": 1795700688434,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -2998,14 +2998,14 @@
             "keywords",
             "planMeta"
           ],
-          "endedAt": 1795699054012
+          "endedAt": 1795700700946
         },
         {
-          "runId": "all-1795699033240-IB-30",
+          "runId": "all-1795700688434-IB-30",
           "flowId": "orchestration.read",
           "nodeId": "code.read",
           "depth": 2,
-          "startedAt": 1795699054012,
+          "startedAt": 1795700700946,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -3020,14 +3020,14 @@
             "readTokens",
             "drafts"
           ],
-          "endedAt": 1795699160178
+          "endedAt": 1795700759593
         },
         {
-          "runId": "all-1795699033240-IB-30",
+          "runId": "all-1795700688434-IB-30",
           "flowId": "orchestration.verify",
           "nodeId": "code.verify",
           "depth": 2,
-          "startedAt": 1795699160178,
+          "startedAt": 1795700759593,
           "status": "ok",
           "inKeys": [
             "issue",
@@ -3041,7 +3041,7 @@
             "verdict",
             "retries"
           ],
-          "endedAt": 1795699211717
+          "endedAt": 1795700763459
         }
       ],
       "error": ""

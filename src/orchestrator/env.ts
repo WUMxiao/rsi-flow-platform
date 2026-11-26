@@ -24,6 +24,10 @@ export const TOP_K = Number(env.TOP_K ?? 5);
 export const READ_BATCH = Number(env.READ_BATCH ?? 4);
 export const READ_MAX_TOKENS = Number(env.READ_MAX_TOKENS ?? 500);
 
+/** 全文分片（map-reduce 升级路径）：片大小与片数上限共同决定单条预算 */
+export const SHARD_SIZE = Number(env.SHARD_SIZE ?? 40000);
+export const MAX_SHARDS = Number(env.MAX_SHARDS ?? 16);
+
 export const ISSUES_FILE = path.join(ROOT, 'data', 'issues.jsonl');
 export const RESULTS_DIR = path.join(ROOT, 'public', 'results');
 

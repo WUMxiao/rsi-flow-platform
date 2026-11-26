@@ -123,6 +123,26 @@ export function stripGloss(answer: string): string {
     .trim();
 }
 
+/**
+ * 回到原文补全：模型经常把 36 位 UUID / 长数字串输出成前缀（实测 13 位就停了）。
+ * 只要答案是非空前缀、且原文里有同前缀的完整串，就取完整串——这不是编造，是补全。
+ */
+export function snapToSource(answer: string, text: string, format: Contract['answerFormat']): string {
+  const a = strip(answer);
+  if (!a) return a;
+  if (format === 'uuid') {
+    const all = text.match(new RegExp(UUID_RE.source, 'gi')) ?? [];
+    const hit = all.find((u) => u.toLowerCase().startsWith(a.toLowerCase()) && a.length >= 8);
+    return hit ?? a;
+  }
+  if (format === 'digit_string') {
+    const nums = text.match(/\b\d{2,}\b/g) ?? [];
+    const hit = nums.find((n) => n.startsWith(a) && a.length >= 2);
+    return hit ?? a;
+  }
+  return a;
+}
+
 interface LlmAnswer {
   answer?: string;
 }
@@ -199,10 +219,13 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
   if (contract.answerFormat === 'digit_string' || contract.answerFormat === 'uuid' || contract.answerFormat === 'choice_letter') {
     const exclude = excludeFromQuestion(input.issue.input);
     const cands = candidatesFromEvidence(evidenceText, contract, exclude);
-    // 优先选同时出现在 drafts 里的那个
-    const fromDraft = cands.find((c) => drafts.some((d) => d.includes(c)));
-    const pick = fromDraft ?? cands[0];
-    if (pick && formatOk(pick, contract) && evidenceHit(pick, evidence)) {
+    // 优先选"草稿里出现过前缀"的那个（草稿可能是截断的），否则取第一个合规的
+    const ordered = [
+      ...cands.filter((c) => drafts.some((d) => c.toLowerCase().startsWith(d.toLowerCase().slice(0, 8)))),
+      ...cands,
+    ];
+    const pick = ordered.find((c) => formatOk(c, contract) && evidenceHit(c, evidence));
+    if (pick) {
       return {
         finalAnswer: pick,
         verdict: { pass: true, reason: 'rule', format: contract.answerFormat, evidenceHit: true, attempts, note: 'regex-from-evidence' },
@@ -218,7 +241,9 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
     attempts += 1;
     try {
       const { text } = await askModel(input, round === 1);
-      const answer = contract.answerFormat === 'short_entity' ? stripGloss(strip(text)) : strip(text);
+      const shaped = contract.answerFormat === 'short_entity' ? stripGloss(strip(text)) : strip(text);
+      // 前缀补全：模型输出被截断时，回到证据原文取完整串
+      const answer = snapToSource(shaped, evidenceText, contract.answerFormat);
       if (answer && formatOk(answer, contract)) {
         const hit = evidenceHit(answer, evidence);
         // 只有 mustCite 且证据确实命中，才算通过；否则标 no-evidence 但仍返回最佳答案
@@ -239,8 +264,9 @@ export async function verifyStep(input: VerifyInput): Promise<VerifyOutput> {
     }
   }
 
-  // 3) 彻底失败：保留最佳猜测，交给节点层 stop() 上报原因
-  const fallback = drafts[0] ?? (evidence.length ? evidence[0].quote.slice(0, contract.maxChars) : '');
+  // 3) 彻底失败：只在草稿本身合规时才回落，否则宁可返回空——避免把截断串当答案
+  const rawDraft = drafts[0] ?? '';
+  const fallback = formatOk(rawDraft, contract) ? rawDraft : '';
   const reason: VerifyVerdict['reason'] = fallback ? 'no-evidence' : 'empty';
   return {
     finalAnswer: strip(fallback),
