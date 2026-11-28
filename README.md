@@ -106,11 +106,15 @@ src/orchestrator/
   steps/read.ts              批量精读 + 证据逐字校验（含 ESCALATE 实验开关）
   steps/verify.ts            契约核验 + 前缀补全 + 单次重试
   run.ts                     CLI
-data/issues.jsonl            30 条问题（不含 context）
+data/issues.jsonl            32 条问题（30 主 + 2 对照，不含 context）
+data/contexts.jsonl.gz       28 份唯一 context（按 sha1 存，gzip 28.4 MB）
+data/samples.jsonl           32 条样本索引（含 input / answer / sha1）
+data/baseline.jsonl          32 条 gpt-6-sol v3 基线记录
 public/results/*.json        运行结果（含证据与 trace）
 ```
 
 ## 环境
 
 Node ≥ 22（本项目实测 v24，直接跑 `.ts`）、pnpm、Next.js 16。
-数据不随仓库分发：`DATA_DIR` 指向 InfiniteBench 原始 jsonl，`BASELINE_DIR` 指向已存基线。
+数据随仓库分发（`data/` 下三个文件已够跑 30 条）；`DATA_DIR` / `BASELINE_DIR` 是**可选**的逃生门：
+配了就优先用外部完整数据集，没配就用仓库内的包。

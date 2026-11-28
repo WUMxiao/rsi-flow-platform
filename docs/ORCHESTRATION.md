@@ -100,6 +100,10 @@ orchestration.main                depth 0
 
 ## 九、复现
 
+前置：Node ≥ 22 + pnpm；数据随仓库分发（`data/` 下三个文件），**不需要下载 2.3 GB**；
+跑实验还需要模型网关（`OPENAI_BASE_URL` / `OPENAI_API_KEY` / `MODEL=gpt-6-sol`）。
+完整步骤、命令速查与排错见 `docs/RUNBOOK.md`。
+
 ```bash
 pnpm orchestrate --check-issues        # 三方对账，生成 data/issues.jsonl
 pnpm orchestrate --validate            # 8 条静态规则

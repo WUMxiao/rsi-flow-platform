@@ -8,7 +8,7 @@
 | # | 目标 | 结论 | 关键证据 |
 |---|---|---|---|
 | 1 | 10 条问题清单，每条可判定对错 | ✅ 超额（32 条） | `data/issues.jsonl`（30 主 + 2 对照），每条含 input / gold / ctx / 失败类型；30 行结果 gold 与 baseline 覆盖率 100% |
-| 2 | 平台跑通 + ≥10 条前后对照 | ✅ 达标 | 引擎原生嵌套 `main → read(flow) → verify(flow)`；30 条对照，修复 **12 条（原始）/ 15 条（规范化）** |
+| 2 | 平台跑通 + ≥10 条前后对照 | ✅ 达标（引擎层） | 引擎原生嵌套 `main → read(flow) → verify(flow)`；30 条对照，修复 **12 条（原始）/ 15 条（规范化）**。注意：执行入口是 CLI，页面只展示（见 §六.5） |
 | 3 | 修复成功率 + 失败原因分析 | ✅ 基本达标 | 12/30、15/30 分档；15 条失败按 4 类机制归因，区分"能力不足/有意放弃" |
 | 4 | 可复用到新问题 + 说明结构理由 | ✅ 达标 | 20 条新样本按事前注册规则抽取、零单条调参运行；消融回答"为什么是三层" |
 | 5 | 可自动化部分提炼成结构 + 铺路 + 人工说明 | ⚠️ **部分达标** | L1 判据已工程化并实测；**L2 零成本闸门缺失、生成器仅单次演示** |
@@ -89,16 +89,25 @@
 2. **15 依赖答案规范化**：原始 12，规范化 +3（去尾量词、数字形态互转）。两个数都列。
 3. **失败分类是人工判断**：4 类机制没有量化阈值。
 4. **样本扩样是事先注册的**：`docs/ISSUES.md §六` 写定配额、入选条件、排序，抽题前定死；但原 10 条里只有 4–5 条修好，评审若问"为什么不是原 10 条全中"，答案是原 10 条中有 4 条属于全书聚合/语义推断。
+5. **未接入后端，页面不能触发执行**：本次是"平台引擎上的独立实验"。执行入口是 CLI（`pnpm orchestrate --all`），页面是静态导出、只读 `public/results/*.json`；没有走 Spring 的 `/facade/engine/flow`，也没有改 Java 引擎。要"点一下就跑"，需去掉 `output:'export'` 加 API route（约 2–3 小时），或接后端（需用 Java 重写节点，并重跑全部实验）。
+6. **结果有波动**：模型非确定性。同一结构两次运行，失败/通过会变（例如 IB-03 一次答 `情侣`、一次答 `男朋友`；IB-09 一次 `Thirty`、一次 `29`）。所以 12/30 与 15/30 应看作区间，不是恒定值。
 
 ## 七、复现
 
+**前提**：Node ≥ 22 + pnpm + 能访问 npm registry；要跑实验还需模型网关（`OPENAI_BASE_URL` / `OPENAI_API_KEY` / `MODEL=gpt-6-sol`）。
+**数据不需要下载**——30 条样本与基线已随仓库分发（`data/contexts.jsonl.gz` 等三个文件）。
+完整步骤与排错见 `docs/RUNBOOK.md`。
+
 ```bash
-pnpm orchestrate --check-issues        # 三方对账
+pnpm install
+pnpm dev                               # 看页面，零外部依赖
 pnpm orchestrate --validate            # 8 条静态规则
 pnpm orchestrate --selftest-validator  # 7 个破坏用例
-pnpm orchestrate --smoke-nest          # 三层空跑 trace
-pnpm orchestrate --all                 # 30 条，约 5 分钟
+pnpm orchestrate --check-issues        # 三方对账（用仓库内数据即可）
+pnpm orchestrate --engine IB-06        # 单条，期望 99700
+pnpm orchestrate --all                 # 30 条，约 43 次调用
 pnpm orchestrate --rescore main30v2    # 只重算判分，0 次调用
 pnpm orchestrate --ablation            # 两层消融
 pnpm orchestrate --autogen-demo        # 生成→校验判死
 ```
+
