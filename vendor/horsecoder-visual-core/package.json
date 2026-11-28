@@ -1,0 +1,25 @@
+{
+  "name": "@horsecoder/visual-core",
+  "version": "0.3.12",
+  "description": "Vendored build of @horsecoder/visual-core 0.3.12 (MIT) so this repo runs standalone.",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": ["dist", "types"],
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21",
+    "rc-tooltip": "^5.1.0",
+    "react-inlinesvg": "^2.2.2",
+    "react-is": "^16.13.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "styled-components": "^5.2.1"
+  }
+}

@@ -1,6 +1,6 @@
 packages:
   - '.'
 
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+# sharp / unrs-resolver ship native install scripts; without this pnpm aborts with
+# ERR_PNPM_IGNORED_BUILDS and leaves node_modules half-linked.
+dangerouslyAllowAllBuilds: true

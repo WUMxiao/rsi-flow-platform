@@ -32,12 +32,30 @@ orchestration.main                          depth 0
 
 嵌套由引擎的 `runNode → run(childFlow)` 递归完成，没有自写调度器（全仓只有一处 `flow.run(...)`）。
 
+## 仓库结构
+
+| 角色 | 仓库 | 说明 |
+|---|---|---|
+| 前端（本仓库） | https://github.com/WUMxiao/rsi-data-platform | 编排实验、页面、文档 |
+| 前端编排框架 | https://github.com/WUMxiao/rsi-data-visual | 上游 `@horsecoder/visual-core` 0.3.12，**未改动**；本仓库在 `vendor/` 内置了一份 dist 以便单独运行 |
+| 后端 | https://github.com/WUMxiao/rsi-data-spring-boot | 上游原样 fork，**未改动** |
+| 后端 rsi 编排框架 | https://github.com/WUMxiao/rsi-flow | 上游原样 fork，**未改动**（Java 引擎 `cc.eamon.open.flow`） |
+
+> 本仓库**不依赖后端与数据库**：执行由本地 Node 跑 JS 引擎完成，页面读静态 JSON。
+> 也因此没有接入平台的 `/facade/engine/flow` 服务端链路——这一点在 `docs/REPORT.md` 的局限里写明。
+
 ## 快速开始
 
 ```bash
-pnpm install
-cp .env.example .env.local      # 填 DATA_DIR / BASELINE_DIR / OPENAI_*
-pnpm dev                        # 打开 /orchestration（静态导出，无运行按钮）
+pnpm install        # 依赖全部来自公共 npm + 仓库内 vendor/，无需私服
+pnpm dev            # 打开 /orchestration，直接能看到已跑完的 30 条结果
+pnpm build          # 静态导出到 out/
+```
+
+页面能看**不需要**任何外部资源。要重跑实验才需要：
+
+```bash
+cp .env.example .env.local   # 填 DATA_DIR（InfiniteBench jsonl）、BASELINE_DIR（基线原件）、OPENAI_*
 
 # 不需要模型
 pnpm orchestrate --check-issues          # 三方对账，生成 data/issues.jsonl
