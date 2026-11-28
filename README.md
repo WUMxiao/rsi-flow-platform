@@ -49,15 +49,21 @@ orchestration.main                          depth 0
 ## 在平台后端上跑（30 条）
 
 ```powershell
-# 1) 构建后端运行包（把节点实现与 H2 注入平台自带的 fat jar）
-powershell -File scripts/build-backend.ps1
+# 前提：Java 8+（只跑不建的话不需要 Maven / 不需要私服凭据）
 
-# 2) 起两个进程：Node worker(39100) + Java 后端(39910，H2 内存库)
+# 1) 起两个进程：Node worker(39100) + Java 后端(39910，H2 内存库)
+#    后端运行包已随仓库分发：backend/core-starter-case.jar（61 MB）
 powershell -File scripts/start-all.ps1
 
-# 3) 通过后端跑全部 30 条（结果落 cases/results/）
+# 2) 通过后端跑全部 30 条（结果落 cases/results/）
 node server/run-all-backend.mjs 3
+
+# 可选：从平台原始 fat jar 重建运行包（需要 JDK 8 + Python 3）
+powershell -File scripts/build-backend.ps1
 ```
+
+> `backend/core-starter-case.jar` = 平台原包 + 我们的节点实现 + H2 驱动，已提交进仓库，
+> 所以换机器 **不需要 Maven、不需要私服账号**。
 
 页面：`pnpm dev` → `http://localhost:3000/orchestration` →「后端运行」页签，可单条或全部运行。
 

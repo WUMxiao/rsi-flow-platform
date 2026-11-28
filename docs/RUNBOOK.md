@@ -105,6 +105,30 @@ MODEL=gpt-6-sol
 
 ---
 
+## 3.5 模式 D：跑在平台后端上（Java 引擎）
+
+> 需要：Java 8+；**不需要 Maven、不需要私服账号**（运行包已随仓库分发）。
+
+```powershell
+powershell -File scripts/start-all.ps1      # 起 worker(39100) + 后端(39910，H2)
+node server/run-all-backend.mjs 3            # 30 条全走后端，结果落 cases/results/
+```
+
+页面上：`pnpm dev` → `/orchestration` →「后端运行」页签，可单条或全部运行；也可直接带 `?tab=backend&autorun=IB-06` 打开即跑。
+
+链路：页面/脚本 → `POST /facade/engine/flow` → Java 引擎 `FLOW_RUN` → 节点 `FLOW_CODE_RUN`（我们覆盖了平台的空壳实现）→ HTTP 回调 worker → plan→read→verify → `FlowEngine.register("result", json)`。
+
+| 文件 | 作用 |
+|---|---|
+| `backend/core-starter-case.jar` | 平台原包 + 节点实现 + H2 驱动，**已入仓** |
+| `server/worker.mjs` | Node worker，复用 TS 管线 |
+| `server/FlowCodeRun.java` / `CorsConfig.java` | 节点新实现、跨域放行（源码，供重建） |
+| `scripts/build-backend.ps1` | 从平台原始 fat jar 重建运行包（JDK 8 + Python 3） |
+
+> 后端用 H2 内存库启动，只是为了满足控制器上的 `@Transactional`，数据不落库。
+
+---
+
 ## 4. 命令速查
 
 | 命令 | 需要数据 | 需要 key | 作用 |

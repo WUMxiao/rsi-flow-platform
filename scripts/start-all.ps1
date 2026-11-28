@@ -1,7 +1,7 @@
 # 一键启动后端链路：Node worker(39100) + Java 后端(39910)
 # 用法：powershell -ExecutionPolicy Bypass -File scripts\start-all.ps1
 param(
-    [string]$Jar = "$PSScriptRoot\..\..\rsi-flow-spring-boot\core-starter\target\core-starter-case.jar",
+    [string]$Jar = "$PSScriptRoot\..\backend\core-starter-case.jar",
     [string]$EnvFile = "$PSScriptRoot\..\.env.local"
 )
 

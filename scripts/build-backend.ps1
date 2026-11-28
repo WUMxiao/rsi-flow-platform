@@ -1,9 +1,9 @@
-# 构建后端运行包：把节点实现与 H2 注入原 fat jar，产出 core-starter-case.jar
+﻿# 构建后端运行包：把节点实现与 H2 注入原 fat jar，产出 core-starter-case.jar
 # 前提：JDK 8 + Python 3；原 fat jar 位于 rsi-flow-spring-boot/core-starter/target/
 param(
     [string]$SourceJar = "$PSScriptRoot\..\..\rsi-flow-spring-boot\core-starter\target\core-starter-1.0.0-executable.jar",
     [string]$H2Jar     = "$PSScriptRoot\..\..\.tools\h2-1.4.200.jar",
-    [string]$OutJar    = "$PSScriptRoot\..\..\rsi-flow-spring-boot\core-starter\target\core-starter-case.jar"
+    [string]$OutJar    = "$PSScriptRoot\..\backend\core-starter-case.jar"
 )
 
 $ErrorActionPreference = 'Stop'
