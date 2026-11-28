@@ -1,0 +1,102 @@
+{
+  "caseId": "IB-07",
+  "task": "number_string",
+  "sampleId": "277",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 3745,
+  "result": {
+    "caseId": "IB-07",
+    "task": "number_string",
+    "question": "What is the sequence of digits?",
+    "gold": [
+      "3333995555"
+    ],
+    "answer": "3333995555",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "rule",
+      "format": "digit_string",
+      "evidenceHit": true,
+      "attempts": 0,
+      "note": "regex-from-evidence"
+    },
+    "evidence": [
+      {
+        "chunkId": "c57",
+        "quote": "The sequence of digits is 3333995555.",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859229845-IB-07",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859229845,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859229847
+      },
+      {
+        "runId": "worker-1795859229845-IB-07",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859229847,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859233580
+      },
+      {
+        "runId": "worker-1795859229845-IB-07",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859233581,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859233581
+      }
+    ],
+    "ms": 3736
+  }
+}

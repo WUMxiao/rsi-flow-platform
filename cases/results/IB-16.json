@@ -1,0 +1,99 @@
+{
+  "caseId": "IB-16",
+  "task": "longbook_qa_chn",
+  "sampleId": "104",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 36640,
+  "result": {
+    "caseId": "IB-16",
+    "task": "longbook_qa_chn",
+    "question": "请问有多少个人当过皇帝？",
+    "gold": [
+      "4",
+      "四",
+      "四个",
+      "4个"
+    ],
+    "answer": "5人",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「5」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c257",
+        "quote": "而儒教晋汉先生，立赵构为帝，将我等视为弃子……",
+        "verified": true
+      },
+      {
+        "chunkId": "c257",
+        "quote": "说起来，钦宗陛下，当初也是主议和的高手啊",
+        "verified": true
+      },
+      {
+        "chunkId": "c450",
+        "quote": "像是姬象，古先生，太上无败，乃至于嘉靖皇帝，都达到了超越光阴而不朽的境界",
+        "verified": true
+      },
+      {
+        "chunkId": "c7",
+        "quote": "万历皇帝的命令……当然了，骆思恭完全明白，说是万历皇帝的命令，事实上不过是郑贵妃的意思。",
+        "verified": true
+      },
+      {
+        "chunkId": "c102",
+        "quote": "当年锦衣卫有一次没有驾帖就去抓人，那人一点也不怕，当场对峙，索要驾帖，当时锦衣卫拿不出来，只能改口说是去慰问他的，这个人就是隆庆帝时的内阁首辅高拱。",
+        "verified": false
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859287942-IB-22",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859287942,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859287944
+      },
+      {
+        "runId": "worker-1795859287942-IB-22",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859287944,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 36634
+  }
+}

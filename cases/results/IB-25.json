@@ -1,0 +1,97 @@
+{
+  "caseId": "IB-25",
+  "task": "kv_retrieval",
+  "sampleId": "149",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 4847,
+  "result": {
+    "caseId": "IB-25",
+    "task": "kv_retrieval",
+    "question": "\nKey: \"e84c3080-45f6-4c50-9487-fd2be08bff23\"\nThe value associated with the specified key is: ",
+    "gold": [
+      "81c74316-6ce3-4dbc-86f0-332d73520b6c"
+    ],
+    "answer": "81c74316-6ce3-4dbc-86f0-332d73520b6c",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "rule",
+      "format": "uuid",
+      "evidenceHit": true,
+      "attempts": 0,
+      "note": "regex-from-evidence"
+    },
+    "evidence": [
+      {
+        "chunkId": "c15",
+        "quote": "\"e84c3080-45f6-4c50-9487-fd2be08bff23\": \"81c74316-6ce3-4dbc-86f0-332d73520b6c\"",
+        "verified": true
+      }
+    ],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859296247-IB-27",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859296247,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859296253
+      },
+      {
+        "runId": "worker-1795859296247-IB-27",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859296253,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859296247-IB-27",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859298216,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859298216
+      }
+    ],
+    "ms": 4836
+  }
+}

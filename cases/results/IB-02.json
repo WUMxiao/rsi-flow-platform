@@ -1,0 +1,92 @@
+{
+  "caseId": "IB-02",
+  "task": "longbook_qa_chn",
+  "sampleId": "76",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 18234,
+  "result": {
+    "caseId": "IB-02",
+    "task": "longbook_qa_chn",
+    "question": "文中姓夏的角色一共有几个？",
+    "gold": [
+      "五",
+      "5"
+    ],
+    "answer": "",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "empty",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 0,
+      "note": "读取层没有返回任何证据"
+    },
+    "evidence": [],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859210063-IB-04",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859210063,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859210511
+      },
+      {
+        "runId": "worker-1795859210063-IB-04",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859210511,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859210063-IB-04",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859219569,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859219569
+      }
+    ],
+    "ms": 17454
+  }
+}

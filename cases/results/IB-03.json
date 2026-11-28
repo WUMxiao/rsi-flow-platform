@@ -1,0 +1,76 @@
+{
+  "caseId": "IB-03",
+  "task": "longbook_qa_chn",
+  "sampleId": "137",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 28495,
+  "result": {
+    "caseId": "IB-03",
+    "task": "longbook_qa_chn",
+    "question": "中森明菜和木村宏是什么关系",
+    "gold": [
+      "情侣"
+    ],
+    "answer": "情侣",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c421",
+        "quote": "不过两人可是官宣过的情侣身份",
+        "verified": true
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859228959-IB-06",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859228959,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859228962
+      },
+      {
+        "runId": "worker-1795859228959-IB-06",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859228962,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 27978
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "caseId": "IB-04",
+  "task": "longbook_qa_chn",
+  "sampleId": "136",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 29482,
+  "result": {
+    "caseId": "IB-04",
+    "task": "longbook_qa_chn",
+    "question": "木宏村如何重新开始一个新的人生",
+    "gold": [
+      "喝醉"
+    ],
+    "answer": "歌手",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c0",
+        "quote": "先熟悉一下环境，再重拾自己的老本行，先当个歌手吧",
+        "verified": true
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859239414-IB-10",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859239414,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859239434
+      },
+      {
+        "runId": "worker-1795859239414-IB-10",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859239434,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 29463
+  }
+}

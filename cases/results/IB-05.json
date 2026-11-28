@@ -1,0 +1,105 @@
+{
+  "caseId": "IB-05",
+  "task": "longbook_qa_chn",
+  "sampleId": "112",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 9377,
+  "result": {
+    "caseId": "IB-05",
+    "task": "longbook_qa_chn",
+    "question": "李波罗有多少个女儿？",
+    "gold": [
+      "0",
+      "零",
+      "无",
+      "没有"
+    ],
+    "answer": "2",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「2」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c545",
+        "quote": "一提到两个女儿，钢铁硬汉德约科维奇的心顿时软了一半！",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859219586-IB-05",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859219586,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859219804
+      },
+      {
+        "runId": "worker-1795859219586-IB-05",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859219804,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859224201
+      },
+      {
+        "runId": "worker-1795859219586-IB-05",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859224201,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859228950
+      }
+    ],
+    "ms": 9364
+  }
+}

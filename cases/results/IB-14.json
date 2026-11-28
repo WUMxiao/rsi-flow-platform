@@ -1,0 +1,97 @@
+{
+  "caseId": "IB-14",
+  "task": "longbook_qa_chn",
+  "sampleId": "71",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 34380,
+  "result": {
+    "caseId": "IB-14",
+    "task": "longbook_qa_chn",
+    "question": "袁国洋的第二个师父是谁？",
+    "gold": [
+      "梅英道人 "
+    ],
+    "answer": "金蛇郎君",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「金蛇郎君」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c24",
+        "quote": "这位前辈和我实有师徒之分，我许多武功是从他那里学的。",
+        "verified": true
+      }
+    ],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859279102-IB-19",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859279102,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859280045
+      },
+      {
+        "runId": "worker-1795859279102-IB-19",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859280045,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859279102-IB-19",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859280427,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859284751
+      }
+    ],
+    "ms": 34367
+  }
+}

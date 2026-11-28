@@ -1,0 +1,87 @@
+{
+  "caseId": "IB-20",
+  "task": "longbook_qa_chn",
+  "sampleId": "143",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 8616,
+  "result": {
+    "caseId": "IB-20",
+    "task": "longbook_qa_chn",
+    "question": "唐三一共花了多少费用拍下狐尾舍利和“迟缓之石”",
+    "gold": [
+      "8000元素币",
+      "八千元素币"
+    ],
+    "answer": "八千元素币",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「八千元素币」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c268",
+        "quote": "“三……三六……号，……五千……元素币……。”声音在迟缓中带着诧异，拍卖师有些惊讶的说道。",
+        "verified": true
+      },
+      {
+        "chunkId": "c268",
+        "quote": "“三千元素币。”蓝狐族拍卖师在落槌的那一瞬",
+        "verified": false
+      },
+      {
+        "chunkId": "c268",
+        "quote": "唐三出手！\n\n时空道标是他必须要拿下的，哪怕倾其所有也要拿下。",
+        "verified": false
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859290868-IB-24",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859290868,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859290869
+      },
+      {
+        "runId": "worker-1795859290868-IB-24",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859290869,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 8609
+  }
+}

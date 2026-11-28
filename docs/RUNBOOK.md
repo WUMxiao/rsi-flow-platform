@@ -137,6 +137,7 @@ MODEL=gpt-6-sol
 
 ## 6. 边界（先看清楚再判断）
 
-- **执行入口是命令行，不是页面。** 页面采用静态导出（`output: 'export'`），不能放 route handler，所以没有“运行”按钮；它只读 `public/results/*.json`。
+- **执行入口有两条。** ① 命令行（`pnpm orchestrate --all`，主路径，稳定）；② 页面「后端运行」页签 → 平台后端 `/facade/engine/flow` → Java 引擎 `FLOW_RUN` → 节点回调本地 worker。第 ② 条要先跑 `scripts/build-backend.ps1` 与 `scripts/start-all.ps1`，且依赖 Node worker 在 39100 上存活。
+- **不经过数据库。** 后端用注入的 H2 内存库启动（`@Transactional` 需要连接），不依赖 MySQL；数据也不落库。
 - **不经过后端。** 本次没有接入 Spring 的 `/facade/engine/flow`，也没有改 Java 引擎；执行在本地 Node 里跑前端同款的 `@horsecoder/flow`。
 - **要“点一下就跑”，需要额外的改造**：去掉静态导出并加 `app/api/orchestrate/run`（约 2–3 小时），或接后端引擎（需重写 Java 节点）。

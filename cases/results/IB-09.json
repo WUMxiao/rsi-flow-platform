@@ -1,0 +1,134 @@
+{
+  "caseId": "IB-09",
+  "task": "longbook_qa_eng",
+  "sampleId": "255",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 10831,
+  "result": {
+    "caseId": "IB-09",
+    "task": "longbook_qa_eng",
+    "question": "How old is Felicity at the start of his narration?",
+    "gold": [
+      "Thirty"
+    ],
+    "answer": "Thirty",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c0",
+        "quote": "I am a young man apparently of about thirty years of age",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859243116-IB-12",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859243116,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859243144
+      },
+      {
+        "runId": "worker-1795859243116-IB-12",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859243144,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859247819
+      },
+      {
+        "runId": "worker-1795859243116-IB-12",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859244550,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859250228
+      },
+      {
+        "runId": "worker-1795859243116-IB-12",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859247789,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859243116-IB-12",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859247819,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 10818
+  }
+}

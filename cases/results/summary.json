@@ -1,0 +1,312 @@
+{
+  "backend": "http://127.0.0.1:39910",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "total": 30,
+  "ok": 30,
+  "strictPass": 14,
+  "strictPassRaw": 14,
+  "totalCalls": 69,
+  "elapsedMs": 329938,
+  "results": [
+    {
+      "caseId": "IB-01",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 8731,
+      "error": null
+    },
+    {
+      "caseId": "IB-02",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 18234,
+      "error": null
+    },
+    {
+      "caseId": "IB-05",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "2",
+      "calls": 3,
+      "ms": 9377,
+      "error": null
+    },
+    {
+      "caseId": "IB-03",
+      "task": "longbook_qa_chn",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "情侣",
+      "calls": 1,
+      "ms": 28495,
+      "error": null
+    },
+    {
+      "caseId": "IB-07",
+      "task": "number_string",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "3333995555",
+      "calls": 3,
+      "ms": 3745,
+      "error": null
+    },
+    {
+      "caseId": "IB-08",
+      "task": "kv_retrieval",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
+      "calls": 3,
+      "ms": 5813,
+      "error": null
+    },
+    {
+      "caseId": "IB-06",
+      "task": "passkey",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "99700",
+      "calls": 4,
+      "ms": 10448,
+      "error": null
+    },
+    {
+      "caseId": "IB-04",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "歌手",
+      "calls": 1,
+      "ms": 29482,
+      "error": null
+    },
+    {
+      "caseId": "IB-10",
+      "task": "code_debug",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 3707,
+      "error": null
+    },
+    {
+      "caseId": "IB-09",
+      "task": "longbook_qa_eng",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "Thirty",
+      "calls": 3,
+      "ms": 10831,
+      "error": null
+    },
+    {
+      "caseId": "IB-11",
+      "task": "longbook_qa_chn",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "大回",
+      "calls": 1,
+      "ms": 10839,
+      "error": null
+    },
+    {
+      "caseId": "IB-12",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "自己",
+      "calls": 1,
+      "ms": 9795,
+      "error": null
+    },
+    {
+      "caseId": "IB-13",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 3463,
+      "error": null
+    },
+    {
+      "caseId": "IB-15",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "一个",
+      "calls": 2,
+      "ms": 9236,
+      "error": null
+    },
+    {
+      "caseId": "IB-17",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "两次",
+      "calls": 3,
+      "ms": 8385,
+      "error": null
+    },
+    {
+      "caseId": "IB-18",
+      "task": "longbook_qa_chn",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "十万",
+      "calls": 3,
+      "ms": 8564,
+      "error": null
+    },
+    {
+      "caseId": "IB-14",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "金蛇郎君",
+      "calls": 2,
+      "ms": 34380,
+      "error": null
+    },
+    {
+      "caseId": "IB-19",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 6049,
+      "error": null
+    },
+    {
+      "caseId": "IB-21",
+      "task": "passkey",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "57654",
+      "calls": 3,
+      "ms": 2788,
+      "error": null
+    },
+    {
+      "caseId": "IB-16",
+      "task": "longbook_qa_chn",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "5人",
+      "calls": 1,
+      "ms": 36640,
+      "error": null
+    },
+    {
+      "caseId": "IB-22",
+      "task": "passkey",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "82368",
+      "calls": 2,
+      "ms": 2926,
+      "error": null
+    },
+    {
+      "caseId": "IB-20",
+      "task": "longbook_qa_chn",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "八千元素币",
+      "calls": 1,
+      "ms": 8616,
+      "error": null
+    },
+    {
+      "caseId": "IB-24",
+      "task": "number_string",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "6664444889",
+      "calls": 2,
+      "ms": 5202,
+      "error": null
+    },
+    {
+      "caseId": "IB-23",
+      "task": "number_string",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "4511111822",
+      "calls": 2,
+      "ms": 5900,
+      "error": null
+    },
+    {
+      "caseId": "IB-25",
+      "task": "kv_retrieval",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "81c74316-6ce3-4dbc-86f0-332d73520b6c",
+      "calls": 2,
+      "ms": 4847,
+      "error": null
+    },
+    {
+      "caseId": "IB-27",
+      "task": "longbook_qa_eng",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 3595,
+      "error": null
+    },
+    {
+      "caseId": "IB-28",
+      "task": "longbook_qa_eng",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 2,
+      "ms": 3395,
+      "error": null
+    },
+    {
+      "caseId": "IB-30",
+      "task": "code_debug",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "",
+      "calls": 3,
+      "ms": 3279,
+      "error": null
+    },
+    {
+      "caseId": "IB-26",
+      "task": "kv_retrieval",
+      "strictPass": true,
+      "strictPassRaw": true,
+      "answer": "17ee2cbf-d011-4fdb-8258-71520c9b008c",
+      "calls": 4,
+      "ms": 10587,
+      "error": null
+    },
+    {
+      "caseId": "IB-29",
+      "task": "code_debug",
+      "strictPass": false,
+      "strictPassRaw": false,
+      "answer": "recvfrom",
+      "calls": 5,
+      "ms": 22589,
+      "error": null
+    }
+  ]
+}

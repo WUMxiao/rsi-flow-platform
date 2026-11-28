@@ -1,0 +1,58 @@
+{
+  "id": "@com.horsecoder.common.whuTalent.flowTesting.core/CASE_IB-05",
+  "name": "CASE_IB-05",
+  "type": "flow",
+  "title": "IB-05 longbook_qa_chn",
+  "params": [
+    {
+      "title": "案例编号",
+      "name": "caseId",
+      "type": "String",
+      "notnull": true
+    }
+  ],
+  "results": [
+    {
+      "title": "运行结果",
+      "name": "result",
+      "type": "String",
+      "notnull": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "FLOW_NODE_CASE",
+      "type": "event",
+      "title": "执行案例",
+      "reference": "FLOW_CODE_CASE",
+      "params": [
+        {
+          "title": "案例编号",
+          "name": "caseId",
+          "type": "String",
+          "notnull": true
+        }
+      ],
+      "results": [
+        {
+          "title": "运行结果",
+          "name": "result",
+          "type": "String",
+          "notnull": true
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "source": "start",
+      "target": "FLOW_NODE_CASE",
+      "condition": "true"
+    },
+    {
+      "source": "FLOW_NODE_CASE",
+      "target": "end",
+      "condition": "true"
+    }
+  ]
+}

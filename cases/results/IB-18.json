@@ -1,0 +1,102 @@
+{
+  "caseId": "IB-18",
+  "task": "longbook_qa_chn",
+  "sampleId": "122",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 8564,
+  "result": {
+    "caseId": "IB-18",
+    "task": "longbook_qa_chn",
+    "question": "最后, 公司给王贵平的赔偿费是多少",
+    "gold": [
+      "十万"
+    ],
+    "answer": "十万",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c44",
+        "quote": "就十万",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859270536-IB-18",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859270536,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859270662
+      },
+      {
+        "runId": "worker-1795859270536-IB-18",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859270662,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859275134
+      },
+      {
+        "runId": "worker-1795859270536-IB-18",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859275135,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859279092
+      }
+    ],
+    "ms": 8556
+  }
+}

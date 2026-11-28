@@ -1,0 +1,108 @@
+{
+  "caseId": "IB-17",
+  "task": "longbook_qa_chn",
+  "sampleId": "106",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 8385,
+  "result": {
+    "caseId": "IB-17",
+    "task": "longbook_qa_chn",
+    "question": "姬象穿越过几次？",
+    "gold": [
+      "一",
+      "1"
+    ],
+    "answer": "两次",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「无法确定」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c0",
+        "quote": "姬象穿越了，魂灵被引导到这片天地之中，现在所见到的就是这样的情况。",
+        "verified": true
+      },
+      {
+        "chunkId": "c0",
+        "quote": "同名同姓，这都是穿越的常规情况。",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859262150-IB-17",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859262150,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859262238
+      },
+      {
+        "runId": "worker-1795859262150-IB-17",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859262238,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859267335
+      },
+      {
+        "runId": "worker-1795859262150-IB-17",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859267335,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859270528
+      }
+    ],
+    "ms": 8379
+  }
+}

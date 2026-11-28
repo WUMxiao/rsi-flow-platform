@@ -1,0 +1,92 @@
+{
+  "caseId": "IB-13",
+  "task": "longbook_qa_chn",
+  "sampleId": "62",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 3463,
+  "result": {
+    "caseId": "IB-13",
+    "task": "longbook_qa_chn",
+    "question": "陈晋毅的父亲在陈晋毅多少岁时死的？",
+    "gold": [
+      "25",
+      "二十五"
+    ],
+    "answer": "",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "empty",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 0,
+      "note": "读取层没有返回任何证据"
+    },
+    "evidence": [],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859252918-IB-15",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859252918,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859253096
+      },
+      {
+        "runId": "worker-1795859252918-IB-15",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859253097,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859252918-IB-15",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859253691,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859253691
+      }
+    ],
+    "ms": 3453
+  }
+}

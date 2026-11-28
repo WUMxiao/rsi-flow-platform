@@ -1,0 +1,99 @@
+{
+  "caseId": "IB-15",
+  "task": "longbook_qa_chn",
+  "sampleId": "91",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 9236,
+  "result": {
+    "caseId": "IB-15",
+    "task": "longbook_qa_chn",
+    "question": "秉文总共有多少个二爷？",
+    "gold": [
+      "2",
+      "两",
+      "二"
+    ],
+    "answer": "一个",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "no-evidence",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 1,
+      "note": "第 1 次答案「一个」格式合规但证据里找不到"
+    },
+    "evidence": [
+      {
+        "chunkId": "c1",
+        "quote": "老人由衷的感叹道，他是风秉文名副其实的二爷，是风灵钧的弟弟。",
+        "verified": true
+      }
+    ],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859253701-IB-16",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859253701,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859253854
+      },
+      {
+        "runId": "worker-1795859253701-IB-16",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859253854,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859253701-IB-16",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859259056,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859262142
+      }
+    ],
+    "ms": 9224
+  }
+}

@@ -41,10 +41,29 @@ orchestration.main                          depth 0
 | 后端 | https://github.com/WUMxiao/rsi-data-spring-boot | 上游原样 fork，**未改动** |
 | 后端 rsi 编排框架 | https://github.com/WUMxiao/rsi-flow | 上游原样 fork，**未改动**（Java 引擎 `cc.eamon.open.flow`） |
 
-> 本仓库**不依赖后端与数据库**：执行由本地 Node 跑 JS 引擎完成，页面读静态 JSON。
-> 也因此没有接入平台的 `/facade/engine/flow` 服务端链路——这一点在 `docs/REPORT.md` 的局限里写明。
+> **两条执行路径都成立**：
+> ① 命令行：本地 Node 直接跑 JS 引擎（`pnpm orchestrate --all`），页面读静态 JSON；
+> ② 平台后端：页面「后端运行」页签 → 后端 `POST /facade/engine/flow` → Java 引擎执行 `FLOW_RUN` → 节点回调本地 worker。
+> 第 ② 条需要先启动后端与 worker（`scripts/start-all.ps1`），结果见 [`cases/EXPLAIN.md`](cases/EXPLAIN.md)。
 
-## 快速开始
+## 在平台后端上跑（30 条）
+
+```powershell
+# 1) 构建后端运行包（把节点实现与 H2 注入平台自带的 fat jar）
+powershell -File scripts/build-backend.ps1
+
+# 2) 起两个进程：Node worker(39100) + Java 后端(39910，H2 内存库)
+powershell -File scripts/start-all.ps1
+
+# 3) 通过后端跑全部 30 条（结果落 cases/results/）
+node server/run-all-backend.mjs 3
+```
+
+页面：`pnpm dev` → `http://localhost:3000/orchestration` →「后端运行」页签，可单条或全部运行。
+
+最近一次通过后端的实测：**14/30** 严格匹配、69 次节点调用（`cases/results/summary.md`）。
+
+## 快速开始（命令行）
 
 ```bash
 pnpm install        # 依赖全部来自公共 npm + 仓库内 vendor/，无需私服

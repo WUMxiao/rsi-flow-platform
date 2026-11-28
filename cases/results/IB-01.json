@@ -1,0 +1,107 @@
+{
+  "caseId": "IB-01",
+  "task": "longbook_qa_chn",
+  "sampleId": "79",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 8731,
+  "result": {
+    "caseId": "IB-01",
+    "task": "longbook_qa_chn",
+    "question": "文中的主角可以任意改变时间线, 请问故事的时间线是否只有5条？",
+    "gold": [
+      "否"
+    ],
+    "answer": "",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "empty",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 0,
+      "note": "读取层没有返回任何证据"
+    },
+    "evidence": [],
+    "calls": 2,
+    "trace": [
+      {
+        "runId": "worker-1795859202115-IB-02",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859202115,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859202467
+      },
+      {
+        "runId": "worker-1795859202115-IB-02",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859202467,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859202115-IB-02",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859208041,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859202115-IB-02",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859210035,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859210035
+      }
+    ],
+    "ms": 8678
+  }
+}

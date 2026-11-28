@@ -5,6 +5,9 @@ import VisualDiagram from '@horsecoder/visual-core';
 import { Alert, Card, Col, Row, Space, Statistic, Table, Tabs, Tag, Typography } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import BackendRunner from './BackendRunner';
+import { CASES } from './cases';
+
 import { FLOWS } from '../../src/flows/flows_my';
 import { buildViewState } from '../../src/flows/viewstate';
 
@@ -230,27 +233,35 @@ export default function OrchestrationPage() {
             ),
           },
           {
+            key: 'backend',
+            label: '后端运行',
+            children: <BackendRunner cases={CASES} />,
+          },
+          {
             key: 'commands',
             label: '复现命令',
             children: (
               <Card size="small">
-                <Paragraph>页面是静态导出的，<b>没有“运行”按钮</b>——执行在服务端命令行，结果落盘后由本页读取。</Paragraph>
+                <Paragraph>
+                  命令行与页面两条路都能跑：命令行落盘后本页读取；“后端运行”页签会直接调用平台后端的
+                  <Text code>/facade/engine/flow</Text>，由 Java 引擎执行、节点回调本地 worker。
+                </Paragraph>
                 <pre style={{ background: '#fafafa', padding: 12, borderRadius: 6, overflowX: 'auto' }}>
 {`# 环境（一次性）
-cp .env.example .env.local   # 填 DATA_DIR / BASELINE_DIR / OPENAI_*
+cp .env.example .env.local   # 只填 OPENAI_*（数据已随仓库）
 
-# 三方对账（方案表 / 数据集 / 基线原件）
+# 启动后端链路（两个进程）
+node --env-file=.env.local server/worker.mjs        # 39100
+java -jar core-starter-case.jar                     # 39910
+
+# 通过后端跑全部 30 条
+node server/run-all-backend.mjs 3
+
+# 命令行直跑（不经过后端）
 pnpm orchestrate --check-issues
-
-# 结构校验 + 反向测试（不需要模型）
 pnpm orchestrate --validate
 pnpm orchestrate --selftest-validator
-
-# 跑 30 条（4 路并发，约 5 分钟）
-pnpm orchestrate --all
-
-# 只重算判分（改判分规则后，0 次模型调用）
-pnpm orchestrate --rescore main30v2`}
+pnpm orchestrate --all`}
                 </pre>
               </Card>
             ),

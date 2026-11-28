@@ -1,0 +1,118 @@
+{
+  "caseId": "IB-21",
+  "task": "passkey",
+  "sampleId": "291",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 2788,
+  "result": {
+    "caseId": "IB-21",
+    "task": "passkey",
+    "question": "What is the pass key?",
+    "gold": [
+      "57654"
+    ],
+    "answer": "57654",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "rule",
+      "format": "digit_string",
+      "evidenceHit": true,
+      "attempts": 0,
+      "note": "regex-from-evidence"
+    },
+    "evidence": [
+      {
+        "chunkId": "c61",
+        "quote": "The pass key is 57654.",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859285152-IB-21",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859285152,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859285153
+      },
+      {
+        "runId": "worker-1795859285152-IB-21",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859285153,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859287929
+      },
+      {
+        "runId": "worker-1795859285152-IB-21",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859287473,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859285152-IB-21",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859287929,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859287929
+      }
+    ],
+    "ms": 2777
+  }
+}

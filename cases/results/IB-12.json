@@ -1,0 +1,77 @@
+{
+  "caseId": "IB-12",
+  "task": "longbook_qa_chn",
+  "sampleId": "40",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 9795,
+  "result": {
+    "caseId": "IB-12",
+    "task": "longbook_qa_chn",
+    "question": "狄仁杰的复仇计划有亲自动手吗？",
+    "gold": [
+      "否",
+      "不是"
+    ],
+    "answer": "自己",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c2",
+        "quote": "大丈夫报仇，只自己一个儿动手。",
+        "verified": true
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859250384-IB-14",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859250384,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859250434
+      },
+      {
+        "runId": "worker-1795859250384-IB-14",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859250434,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 9787
+  }
+}

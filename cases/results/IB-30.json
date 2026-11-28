@@ -1,0 +1,96 @@
+{
+  "caseId": "IB-30",
+  "task": "code_debug",
+  "sampleId": "340",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 3279,
+  "result": {
+    "caseId": "IB-30",
+    "task": "code_debug",
+    "question": "Which funtion has deliberate error?",
+    "gold": [
+      "RemoteLink.moveIntf"
+    ],
+    "answer": "",
+    "strictPass": false,
+    "strictPassRaw": false,
+    "contractPass": false,
+    "verdict": {
+      "pass": false,
+      "reason": "empty",
+      "format": "short_entity",
+      "evidenceHit": false,
+      "attempts": 0,
+      "note": "读取层没有返回任何证据"
+    },
+    "evidence": [],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859301622,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859301628
+      },
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859301628,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859304894
+      },
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859304894,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859304894
+      }
+    ],
+    "ms": 3272
+  }
+}

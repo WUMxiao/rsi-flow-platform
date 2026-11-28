@@ -1,0 +1,123 @@
+{
+  "caseId": "IB-26",
+  "task": "kv_retrieval",
+  "sampleId": "153",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 10587,
+  "result": {
+    "caseId": "IB-26",
+    "task": "kv_retrieval",
+    "question": "\nKey: \"b4911b8d-634d-49b2-92e0-c9c5d201857e\"\nThe value associated with the specified key is: ",
+    "gold": [
+      "17ee2cbf-d011-4fdb-8258-71520c9b008c"
+    ],
+    "answer": "17ee2cbf-d011-4fdb-8258-71520c9b008c",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "rule",
+      "format": "uuid",
+      "evidenceHit": true,
+      "attempts": 0,
+      "note": "regex-from-evidence"
+    },
+    "evidence": [
+      {
+        "chunkId": "c16",
+        "quote": "\"b4911b8d-634d-49b2-92e0-c9c5d201857e\": \"17ee2cbf-d011-4fdb-8258-71520c9b008c\"",
+        "verified": true
+      }
+    ],
+    "calls": 4,
+    "trace": [
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859301622,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859301628
+      },
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859301628,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859304894
+      },
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859304894,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859304894
+      },
+      {
+        "runId": "worker-1795859301622-IB-30",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859306647,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859306647
+      }
+    ],
+    "ms": 10576
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "caseId": "IB-08",
+  "task": "kv_retrieval",
+  "sampleId": "9",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 5813,
+  "result": {
+    "caseId": "IB-08",
+    "task": "kv_retrieval",
+    "question": "\nKey: \"2fdab9e3-7247-4844-9f8d-e42175eafef2\"\nThe value associated with the specified key is: ",
+    "gold": [
+      "a3fa5e4c-705c-4fad-bb48-b37a21f437cc"
+    ],
+    "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "rule",
+      "format": "uuid",
+      "evidenceHit": true,
+      "attempts": 0,
+      "note": "regex-from-evidence"
+    },
+    "evidence": [
+      {
+        "chunkId": "c0",
+        "quote": "\"2fdab9e3-7247-4844-9f8d-e42175eafef2\": \"a3fa5e4c-705c-4fad-bb48-b37a21f437cc\"",
+        "verified": true
+      }
+    ],
+    "calls": 3,
+    "trace": [
+      {
+        "runId": "worker-1795859233590-IB-08",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859233590,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859233592
+      },
+      {
+        "runId": "worker-1795859233590-IB-08",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859233592,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": [
+          "evidence",
+          "readTokens",
+          "drafts"
+        ],
+        "endedAt": 1795859239391
+      },
+      {
+        "runId": "worker-1795859233590-IB-08",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859236092,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": []
+      },
+      {
+        "runId": "worker-1795859233590-IB-08",
+        "flowId": "orchestration.verify",
+        "nodeId": "code.verify",
+        "depth": 2,
+        "startedAt": 1795859239391,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "evidence",
+          "contract",
+          "runId",
+          "drafts"
+        ],
+        "outKeys": [
+          "finalAnswer",
+          "verdict",
+          "retries"
+        ],
+        "endedAt": 1795859239392
+      }
+    ],
+    "ms": 5802
+  }
+}

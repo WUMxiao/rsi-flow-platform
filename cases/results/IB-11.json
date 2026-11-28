@@ -1,0 +1,76 @@
+{
+  "caseId": "IB-11",
+  "task": "longbook_qa_chn",
+  "sampleId": "19",
+  "flowId": "@com.horsecoder.common.whuTalent.flowTesting.core/FLOW_RUN",
+  "httpStatus": 200,
+  "elapsedMs": 10839,
+  "result": {
+    "caseId": "IB-11",
+    "task": "longbook_qa_chn",
+    "question": "哪一章的主角最后死了？",
+    "gold": [
+      "大回"
+    ],
+    "answer": "大回",
+    "strictPass": true,
+    "strictPassRaw": true,
+    "contractPass": true,
+    "verdict": {
+      "pass": true,
+      "reason": "llm",
+      "format": "short_entity",
+      "evidenceHit": true,
+      "attempts": 1,
+      "note": ""
+    },
+    "evidence": [
+      {
+        "chunkId": "c3",
+        "quote": "大回给车压成一个片儿了，赛张纸似的贴在地面上。",
+        "verified": true
+      }
+    ],
+    "calls": 1,
+    "trace": [
+      {
+        "runId": "worker-1795859250238-IB-13",
+        "flowId": "orchestration.main",
+        "nodeId": "code.plan",
+        "depth": 1,
+        "startedAt": 1795859250238,
+        "status": "ok",
+        "inKeys": [
+          "issue",
+          "sampleId",
+          "runId"
+        ],
+        "outKeys": [
+          "chunks",
+          "contract",
+          "keywords",
+          "planMeta"
+        ],
+        "endedAt": 1795859250297
+      },
+      {
+        "runId": "worker-1795859250238-IB-13",
+        "flowId": "orchestration.read",
+        "nodeId": "code.read",
+        "depth": 2,
+        "startedAt": 1795859250297,
+        "status": "pending",
+        "inKeys": [
+          "issue",
+          "chunks",
+          "contract",
+          "runId",
+          "traceId",
+          "stopAfterRead"
+        ],
+        "outKeys": []
+      }
+    ],
+    "ms": 10830
+  }
+}
