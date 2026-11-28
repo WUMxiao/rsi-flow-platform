@@ -1,0 +1,3376 @@
+{
+  "generatedAt": "2026-11-28T08:30:09.175Z",
+  "rows": [
+    {
+      "id": "IB-01",
+      "task": "longbook_qa_chn",
+      "sampleId": "79",
+      "failureType": "F1",
+      "gold": [
+        "否"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "不是，故事中有多次时间线重启，远不止5条。",
+        "score": 0,
+        "keepRatio": 0.0449,
+        "promptTokens": 174077,
+        "completionTokens": 118
+      },
+      "ctxChars": 3859199,
+      "ms": 15309,
+      "calls": 1,
+      "promptTokens": 21029,
+      "completionTokens": 138,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854540099-IB-07",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854540099,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854540101
+        },
+        {
+          "runId": "all-1795854540099-IB-07",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854540101,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854540099-IB-07",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854541473,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854541474
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-02",
+      "task": "longbook_qa_chn",
+      "sampleId": "76",
+      "failureType": "F1",
+      "gold": [
+        "五",
+        "5"
+      ],
+      "answer": "1",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「0」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "0个",
+        "score": 0,
+        "keepRatio": 0.0449,
+        "promptTokens": 174062,
+        "completionTokens": 102
+      },
+      "ctxChars": 3859199,
+      "ms": 10947,
+      "calls": 2,
+      "promptTokens": 26213,
+      "completionTokens": 76,
+      "evidenceCount": 1,
+      "verifiedCount": 0,
+      "evidence": [
+        {
+          "chunkId": "c334",
+          "quote": "老梁是星城北区“星光学府”的现任校长。",
+          "verified": false
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854536831-IB-05",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854536831,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854537035
+        },
+        {
+          "runId": "all-1795854536831-IB-05",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854537035,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-03",
+      "task": "longbook_qa_chn",
+      "sampleId": "137",
+      "failureType": "F1",
+      "gold": [
+        "情侣"
+      ],
+      "answer": "情侣",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "夫妻关系。",
+        "score": 0,
+        "keepRatio": 0.0769,
+        "promptTokens": 175131,
+        "completionTokens": 103
+      },
+      "ctxChars": 2234380,
+      "ms": 17837,
+      "calls": 2,
+      "promptTokens": 26245,
+      "completionTokens": 145,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c421",
+          "quote": "两人可是官宣过的情侣身份",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854541479-IB-08",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854541480,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854541496
+        },
+        {
+          "runId": "all-1795854541479-IB-08",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854541496,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854541479-IB-08",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854541677,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854544392
+        },
+        {
+          "runId": "all-1795854541479-IB-08",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854541920,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-04",
+      "task": "longbook_qa_chn",
+      "sampleId": "136",
+      "failureType": "F1",
+      "gold": [
+        "喝醉"
+      ],
+      "answer": "签约研音，出道挣钱",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「签约事务所」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "木村宏重生为1983年的十七岁美少年后，戒掉放纵的生活，改变造型，凭借歌唱才华签约研音，以歌手身份重新开始人生。",
+        "score": 0,
+        "keepRatio": 0.0769,
+        "promptTokens": 175133,
+        "completionTokens": 145
+      },
+      "ctxChars": 2234380,
+      "ms": 10260,
+      "calls": 2,
+      "promptTokens": 36586,
+      "completionTokens": 143,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c0",
+          "quote": "为了不成为穿越者的耻辱，流浪街头，木村宏知道自己必须要尽快签约一个事务所，拿工资，出道挣钱，没时间给他熟悉环境了。",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854526565,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854527940
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854527940,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854527958,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854532751
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854527958,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854527959,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854533977
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854532751,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854526565-IB-04",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854533977,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854536824
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-05",
+      "task": "longbook_qa_chn",
+      "sampleId": "112",
+      "failureType": "F1",
+      "gold": [
+        "0",
+        "零",
+        "无",
+        "没有"
+      ],
+      "answer": "2个",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「2」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "一个。",
+        "score": 0,
+        "keepRatio": 0.0834,
+        "promptTokens": 175078,
+        "completionTokens": 102
+      },
+      "ctxChars": 2149235,
+      "ms": 8093,
+      "calls": 2,
+      "promptTokens": 25341,
+      "completionTokens": 61,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c545",
+          "quote": "一提到两个女儿，钢铁硬汉德约科维奇的心顿时软了一半！",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854544398-IB-09",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854544399,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854544414
+        },
+        {
+          "runId": "all-1795854544398-IB-09",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854544415,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-06",
+      "task": "passkey",
+      "sampleId": "270",
+      "failureType": "F4",
+      "gold": [
+        "99700"
+      ],
+      "answer": "99700",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "Not provided.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100868,
+        "completionTokens": 99
+      },
+      "ctxChars": 469858,
+      "ms": 2609,
+      "calls": 1,
+      "promptTokens": 5577,
+      "completionTokens": 36,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c57",
+          "quote": "The pass key is 99700.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854537489-IB-06",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854537489,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854537491
+        },
+        {
+          "runId": "all-1795854537489-IB-06",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854537491,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854540098
+        },
+        {
+          "runId": "all-1795854537489-IB-06",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854540098,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854540098
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-07",
+      "task": "number_string",
+      "sampleId": "277",
+      "failureType": "F4",
+      "gold": [
+        "3333995555"
+      ],
+      "answer": "3333995555",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "No digits.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100870,
+        "completionTokens": 103
+      },
+      "ctxChars": 469888,
+      "ms": 9401,
+      "calls": 1,
+      "promptTokens": 11490,
+      "completionTokens": 41,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c57",
+          "quote": "The sequence of digits is 3333995555.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854545473,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854545488
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854545488,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854549494
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854548276,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854549494,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854549494
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854549499,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854549499
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-08",
+      "task": "kv_retrieval",
+      "sampleId": "9",
+      "failureType": "F6",
+      "gold": [
+        "a3fa5e4c-705c-4fad-bb48-b37a21f437cc"
+      ],
+      "answer": "a3fa5e4c-705c-4fad-bb48-b37a21f437cc",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "uuid",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "a3fa5e4c-705c-4fad-bb48-b37a21f437c",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 53262,
+        "completionTokens": 123
+      },
+      "ctxChars": 200011,
+      "ms": 3989,
+      "calls": 1,
+      "promptTokens": 7031,
+      "completionTokens": 100,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c0",
+          "quote": "\"2fdab9e3-7247-4844-9f8d-e42175eafef2\": \"a3fa5e4c-705c-4fad-bb48-b37a21f437cc\"",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854544928-IB-10",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854544928,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854545049
+        },
+        {
+          "runId": "all-1795854544928-IB-10",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854545049,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854544928-IB-10",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854545466,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854545467
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-09",
+      "task": "longbook_qa_eng",
+      "sampleId": "255",
+      "failureType": "F3",
+      "gold": [
+        "Thirty"
+      ],
+      "answer": "29",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「unknown」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "About thirty years old.",
+        "score": 0.4,
+        "keepRatio": 0.9213,
+        "promptTokens": 100874,
+        "completionTokens": 105
+      },
+      "ctxChars": 434156,
+      "ms": 11407,
+      "calls": 2,
+      "promptTokens": 14248,
+      "completionTokens": 43,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c8",
+          "quote": "It was the year 1887",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854553785-IB-15",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854553785,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854554530
+        },
+        {
+          "runId": "all-1795854553785-IB-15",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854554530,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-10",
+      "task": "code_debug",
+      "sampleId": "3",
+      "failureType": "F1",
+      "gold": [
+        "_init"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "B",
+        "score": 0,
+        "keepRatio": 0.4944,
+        "promptTokens": 100693,
+        "completionTokens": 101
+      },
+      "ctxChars": 807189,
+      "ms": 5188,
+      "calls": 1,
+      "promptTokens": 9795,
+      "completionTokens": 15,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854549688-IB-13",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854549688,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854550080
+        },
+        {
+          "runId": "all-1795854549688-IB-13",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854550080,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854549688-IB-13",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854550116,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854550116
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-11",
+      "task": "longbook_qa_chn",
+      "sampleId": "19",
+      "failureType": "F1",
+      "gold": [
+        "大回"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 0,
+        "completionTokens": 0
+      },
+      "ctxChars": 28207,
+      "ms": 4022,
+      "calls": 1,
+      "promptTokens": 23987,
+      "completionTokens": 69,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854545473,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854545488
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854545488,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854549494
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854548276,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854545473-IB-11",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854549494,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854549494
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-12",
+      "task": "longbook_qa_chn",
+      "sampleId": "40",
+      "failureType": "F1",
+      "gold": [
+        "否",
+        "不是"
+      ],
+      "answer": "自己",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "contractPass": true,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "没有。他曾想亲手复仇，但仇人最终因争夺带毒的宝藏而死。",
+        "score": 0,
+        "keepRatio": 0.7589,
+        "promptTokens": 181339,
+        "completionTokens": 125
+      },
+      "ctxChars": 233284,
+      "ms": 8569,
+      "calls": 2,
+      "promptTokens": 42369,
+      "completionTokens": 136,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c2",
+          "quote": "大丈夫报仇，只自己一个儿动手。",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854555809-IB-16",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854555809,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854556595
+        },
+        {
+          "runId": "all-1795854555809-IB-16",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854556595,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854555809-IB-16",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854557881,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-13",
+      "task": "longbook_qa_chn",
+      "sampleId": "62",
+      "failureType": "F1",
+      "gold": [
+        "25",
+        "二十五"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "文中未说明。",
+        "score": 0,
+        "keepRatio": 0.3383,
+        "promptTokens": 181322,
+        "completionTokens": 105
+      },
+      "ctxChars": 521940,
+      "ms": 4093,
+      "calls": 1,
+      "promptTokens": 31981,
+      "completionTokens": 54,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854550120-IB-14",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854550120,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854550412
+        },
+        {
+          "runId": "all-1795854550120-IB-14",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854550412,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854550120-IB-14",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854553763,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854550120-IB-14",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854553781,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854553781
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-14",
+      "task": "longbook_qa_chn",
+      "sampleId": "71",
+      "failureType": "F1",
+      "gold": [
+        "梅英道人 "
+      ],
+      "answer": "金蛇郎君夏超涛",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "contractPass": true,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "穆春姑。",
+        "score": 0,
+        "keepRatio": 0.3297,
+        "promptTokens": 181023,
+        "completionTokens": 104
+      },
+      "ctxChars": 535468,
+      "ms": 10241,
+      "calls": 2,
+      "promptTokens": 27802,
+      "completionTokens": 144,
+      "evidenceCount": 2,
+      "verifiedCount": 2,
+      "evidence": [
+        {
+          "chunkId": "c24",
+          "quote": "金蛇郎君夏超涛是你什么人？",
+          "verified": true
+        },
+        {
+          "chunkId": "c24",
+          "quote": "金蛇郎君我没见过面，不过说起来，这位前辈和我实有师徒之分，我许多武功是从他那里学的。",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854559149-IB-18",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854559149,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854559743
+        },
+        {
+          "runId": "all-1795854559149-IB-18",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854559743,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-15",
+      "task": "longbook_qa_chn",
+      "sampleId": "91",
+      "failureType": "F1",
+      "gold": [
+        "2",
+        "两",
+        "二"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "一个",
+        "score": 0,
+        "keepRatio": 0.0957,
+        "promptTokens": 176625,
+        "completionTokens": 101
+      },
+      "ctxChars": 1822870,
+      "ms": 5361,
+      "calls": 1,
+      "promptTokens": 31597,
+      "completionTokens": 67,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854558078-IB-17",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854558078,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854558418
+        },
+        {
+          "runId": "all-1795854558078-IB-17",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854558418,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854558078-IB-17",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854559146,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854559146
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-16",
+      "task": "longbook_qa_chn",
+      "sampleId": "104",
+      "failureType": "F1",
+      "gold": [
+        "4",
+        "四",
+        "四个",
+        "4个"
+      ],
+      "answer": "三人",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「无法确定」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "7人。",
+        "score": 0,
+        "keepRatio": 0.1017,
+        "promptTokens": 177866,
+        "completionTokens": 103
+      },
+      "ctxChars": 1729011,
+      "ms": 53366,
+      "calls": 2,
+      "promptTokens": 34568,
+      "completionTokens": 41,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c257",
+          "quote": "造化了我等三人重新归来的道路",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854592123,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854592143
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854592143,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854595826,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854596781,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854599853
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854600062,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854604465
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854605662,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854609175
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-17",
+      "task": "longbook_qa_chn",
+      "sampleId": "106",
+      "failureType": "F1",
+      "gold": [
+        "一",
+        "1"
+      ],
+      "answer": "两次",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「两次」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "两次。",
+        "score": 0,
+        "keepRatio": 0.1017,
+        "promptTokens": 177862,
+        "completionTokens": 103
+      },
+      "ctxChars": 1729011,
+      "ms": 11982,
+      "calls": 2,
+      "promptTokens": 26010,
+      "completionTokens": 136,
+      "evidenceCount": 2,
+      "verifiedCount": 2,
+      "evidence": [
+        {
+          "chunkId": "c0",
+          "quote": "姬象穿越了，魂灵被引导到这片天地之中，现在所见到的就是这样的情况。",
+          "verified": true
+        },
+        {
+          "chunkId": "c0",
+          "quote": "姬象被这诵经的浪潮之声，打为一道光芒，破开浮黎，直向某个人间去了。",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854568217-IB-20",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854568217,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854570047
+        },
+        {
+          "runId": "all-1795854568217-IB-20",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854570047,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-18",
+      "task": "longbook_qa_chn",
+      "sampleId": "122",
+      "failureType": "F1",
+      "gold": [
+        "十万"
+      ],
+      "answer": "十万",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "文中未提及。",
+        "score": 0,
+        "keepRatio": 0.1543,
+        "promptTokens": 177180,
+        "completionTokens": 106
+      },
+      "ctxChars": 1139536,
+      "ms": 9065,
+      "calls": 2,
+      "promptTokens": 33390,
+      "completionTokens": 42,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c44",
+          "quote": "就十万",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854560365-IB-19",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854560366,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854565105
+        },
+        {
+          "runId": "all-1795854560365-IB-19",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854565105,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854560365-IB-19",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854565125,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854568214
+        },
+        {
+          "runId": "all-1795854560365-IB-19",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854565297,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-19",
+      "task": "longbook_qa_chn",
+      "sampleId": "125",
+      "failureType": "F1",
+      "gold": [
+        "木屋",
+        "临时驻地",
+        "临时驻地的木屋"
+      ],
+      "answer": "卫王府",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「无法确定」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "",
+        "score": 0,
+        "keepRatio": 0.0281,
+        "promptTokens": 0,
+        "completionTokens": 0
+      },
+      "ctxChars": 6556639,
+      "ms": 44100,
+      "calls": 2,
+      "promptTokens": 33795,
+      "completionTokens": 55,
+      "evidenceCount": 1,
+      "verifiedCount": 0,
+      "evidence": [
+        {
+          "chunkId": "c1631",
+          "quote": "花花说道：“伪帝想纳了她为妃。”",
+          "verified": false
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854592123,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854592143
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854592143,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854595826,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854596781,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854599853
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854600062,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854604465
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-20",
+      "task": "longbook_qa_chn",
+      "sampleId": "143",
+      "failureType": "F1",
+      "gold": [
+        "8000元素币",
+        "八千元素币"
+      ],
+      "answer": "8000元素币",
+      "verdict": {
+        "pass": false,
+        "reason": "no-evidence",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 1,
+        "note": "第 1 次答案「8000元素币」格式合规但证据里找不到"
+      },
+      "contractPass": false,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "无法从所提供的文本确定。",
+        "score": 0,
+        "keepRatio": 0.06,
+        "promptTokens": 175349,
+        "completionTokens": 108
+      },
+      "ctxChars": 2870020,
+      "ms": 11558,
+      "calls": 2,
+      "promptTokens": 25519,
+      "completionTokens": 87,
+      "evidenceCount": 2,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c268",
+          "quote": "“三……三六……号，……五千……元素币……。”",
+          "verified": true
+        },
+        {
+          "chunkId": "c268",
+          "quote": "“三千元素币。”蓝狐族拍卖师在落槌的那一瞬",
+          "verified": false
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854578869-IB-23",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854578869,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854578873
+        },
+        {
+          "runId": "all-1795854578869-IB-23",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854578873,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-21",
+      "task": "passkey",
+      "sampleId": "291",
+      "failureType": "F4",
+      "gold": [
+        "57654"
+      ],
+      "answer": "57654",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "Not provided.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100868,
+        "completionTokens": 103
+      },
+      "ctxChars": 469858,
+      "ms": 3953,
+      "calls": 1,
+      "promptTokens": 11492,
+      "completionTokens": 36,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c61",
+          "quote": "The pass key is 57654.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854570065-IB-21",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854570065,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854570071
+        },
+        {
+          "runId": "all-1795854570065-IB-21",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854570071,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854574018
+        },
+        {
+          "runId": "all-1795854570065-IB-21",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854574018,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854574018
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-22",
+      "task": "passkey",
+      "sampleId": "295",
+      "failureType": "F4",
+      "gold": [
+        "82368"
+      ],
+      "answer": "82368",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "Not provided.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100868,
+        "completionTokens": 103
+      },
+      "ctxChars": 469858,
+      "ms": 4843,
+      "calls": 1,
+      "promptTokens": 5578,
+      "completionTokens": 36,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c61",
+          "quote": "The pass key is 82368.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854574023-IB-22",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854574023,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854574027
+        },
+        {
+          "runId": "all-1795854574023-IB-22",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854574027,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854578865
+        },
+        {
+          "runId": "all-1795854574023-IB-22",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854575384,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854574023-IB-22",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854578865,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854578866
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-23",
+      "task": "number_string",
+      "sampleId": "292",
+      "failureType": "F4",
+      "gold": [
+        "4511111822"
+      ],
+      "answer": "4511111822",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "No digits are provided.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100870,
+        "completionTokens": 105
+      },
+      "ctxChars": 469888,
+      "ms": 3528,
+      "calls": 1,
+      "promptTokens": 5578,
+      "completionTokens": 41,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c61",
+          "quote": "The sequence of digits is 4511111822.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854579778-IB-24",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854579778,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854579782
+        },
+        {
+          "runId": "all-1795854579778-IB-24",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854579782,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854579778-IB-24",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854582397,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854582397
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-24",
+      "task": "number_string",
+      "sampleId": "303",
+      "failureType": "F4",
+      "gold": [
+        "6664444889"
+      ],
+      "answer": "6664444889",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "digit_string",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "No digits are present.",
+        "score": 0,
+        "keepRatio": 0.8513,
+        "promptTokens": 100870,
+        "completionTokens": 105
+      },
+      "ctxChars": 469888,
+      "ms": 4821,
+      "calls": 1,
+      "promptTokens": 8290,
+      "completionTokens": 63,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c63",
+          "quote": "The sequence of digits is 6664444889.",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854582402-IB-25",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854582402,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854582409
+        },
+        {
+          "runId": "all-1795854582402-IB-25",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854582409,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854582402-IB-25",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854584599,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854584599
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-25",
+      "task": "kv_retrieval",
+      "sampleId": "149",
+      "failureType": "F6",
+      "gold": [
+        "81c74316-6ce3-4dbc-86f0-332d73520b6c"
+      ],
+      "answer": "81c74316-6ce3-4dbc-86f0-332d73520b6c",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "uuid",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "81c74316-6ce3-4dbc-86f0-332d73520b6",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 53262,
+        "completionTokens": 122
+      },
+      "ctxChars": 200011,
+      "ms": 3629,
+      "calls": 1,
+      "promptTokens": 11886,
+      "completionTokens": 96,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c15",
+          "quote": "\"e84c3080-45f6-4c50-9487-fd2be08bff23\": \"81c74316-6ce3-4dbc-86f0-332d73520b6c\"",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854584604-IB-26",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854584604,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854584607
+        },
+        {
+          "runId": "all-1795854584604-IB-26",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854584607,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854584604-IB-26",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854586031,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854586031
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-26",
+      "task": "kv_retrieval",
+      "sampleId": "153",
+      "failureType": "F6",
+      "gold": [
+        "17ee2cbf-d011-4fdb-8258-71520c9b008c"
+      ],
+      "answer": "17ee2cbf-d011-4fdb-8258-71520c9b008c",
+      "verdict": {
+        "pass": true,
+        "reason": "rule",
+        "format": "uuid",
+        "evidenceHit": true,
+        "attempts": 0,
+        "note": "regex-from-evidence"
+      },
+      "contractPass": true,
+      "strictPassRaw": true,
+      "strictPass": true,
+      "strictReason": "exact",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "17ee2cbf-d011-4fdb-8258-71520c9b008",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 53262,
+        "completionTokens": 121
+      },
+      "ctxChars": 200011,
+      "ms": 3971,
+      "calls": 1,
+      "promptTokens": 7023,
+      "completionTokens": 99,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c16",
+          "quote": "\"b4911b8d-634d-49b2-92e0-c9c5d201857e\": \"17ee2cbf-d011-4fdb-8258-71520c9b008c\"",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854586034-IB-27",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854586034,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854586050
+        },
+        {
+          "runId": "all-1795854586034-IB-27",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854586050,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854586034-IB-27",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854588575,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854588575
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-27",
+      "task": "longbook_qa_eng",
+      "sampleId": "2",
+      "failureType": "F1",
+      "gold": [
+        "the Hebrides"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "Finlay",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 97727,
+        "completionTokens": 102
+      },
+      "ctxChars": 381748,
+      "ms": 6087,
+      "calls": 1,
+      "promptTokens": 9119,
+      "completionTokens": 33,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854591358-IB-29",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854591359,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854591402
+        },
+        {
+          "runId": "all-1795854591358-IB-29",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854591402,
+          "status": "pending",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": []
+        },
+        {
+          "runId": "all-1795854591358-IB-29",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854592120,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854592121
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-28",
+      "task": "longbook_qa_eng",
+      "sampleId": "43",
+      "failureType": "F1",
+      "gold": [
+        "Chong Hwa"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "Viola gets drunk, calls Skylar, and wanders to Central Park. Feeling lonely and afraid, he sneaks home to see his sister Mckenna.",
+        "score": 0,
+        "keepRatio": 1,
+        "promptTokens": 96221,
+        "completionTokens": 133
+      },
+      "ctxChars": 380419,
+      "ms": 2774,
+      "calls": 1,
+      "promptTokens": 9383,
+      "completionTokens": 15,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854588579-IB-28",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854588579,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854588598
+        },
+        {
+          "runId": "all-1795854588579-IB-28",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854588598,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854591353
+        },
+        {
+          "runId": "all-1795854588579-IB-28",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854591353,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854591353
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-29",
+      "task": "code_debug",
+      "sampleId": "63",
+      "failureType": "F1",
+      "gold": [
+        "Input._do_read"
+      ],
+      "answer": "recvfrom",
+      "verdict": {
+        "pass": true,
+        "reason": "llm",
+        "format": "short_entity",
+        "evidenceHit": true,
+        "attempts": 1,
+        "note": ""
+      },
+      "contractPass": true,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "D",
+        "score": 0,
+        "keepRatio": 0.577,
+        "promptTokens": 100902,
+        "completionTokens": 101
+      },
+      "ctxChars": 693285,
+      "ms": 8495,
+      "calls": 2,
+      "promptTokens": 19555,
+      "completionTokens": 124,
+      "evidenceCount": 1,
+      "verifiedCount": 1,
+      "evidence": [
+        {
+          "chunkId": "c92",
+          "quote": "def recvfrom(self, addr, buflen=1024, flags=0):",
+          "verified": true
+        }
+      ],
+      "trace": [
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854592123,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854592143
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854592143,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854595826,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854596781,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854599853
+        }
+      ],
+      "error": ""
+    },
+    {
+      "id": "IB-30",
+      "task": "code_debug",
+      "sampleId": "340",
+      "failureType": "F1",
+      "gold": [
+        "RemoteLink.moveIntf"
+      ],
+      "answer": "",
+      "verdict": {
+        "pass": false,
+        "reason": "empty",
+        "format": "short_entity",
+        "evidenceHit": false,
+        "attempts": 0,
+        "note": "读取层没有返回任何证据"
+      },
+      "contractPass": false,
+      "strictPassRaw": false,
+      "strictPass": false,
+      "strictReason": "miss",
+      "baseline": {
+        "model": "gpt-6-sol",
+        "raw": "D",
+        "score": 0,
+        "keepRatio": 0.839,
+        "promptTokens": 100898,
+        "completionTokens": 101
+      },
+      "ctxChars": 476780,
+      "ms": 3703,
+      "calls": 1,
+      "promptTokens": 13395,
+      "completionTokens": 41,
+      "evidenceCount": 0,
+      "verifiedCount": 0,
+      "evidence": [],
+      "trace": [
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.main",
+          "nodeId": "code.plan",
+          "depth": 1,
+          "startedAt": 1795854592123,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "sampleId",
+            "runId"
+          ],
+          "outKeys": [
+            "chunks",
+            "contract",
+            "keywords",
+            "planMeta"
+          ],
+          "endedAt": 1795854592143
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.read",
+          "nodeId": "code.read",
+          "depth": 2,
+          "startedAt": 1795854592143,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "chunks",
+            "contract",
+            "runId",
+            "traceId",
+            "stopAfterRead"
+          ],
+          "outKeys": [
+            "evidence",
+            "readTokens",
+            "drafts"
+          ],
+          "endedAt": 1795854595826
+        },
+        {
+          "runId": "all-1795854592123-IB-30",
+          "flowId": "orchestration.verify",
+          "nodeId": "code.verify",
+          "depth": 2,
+          "startedAt": 1795854595826,
+          "status": "ok",
+          "inKeys": [
+            "issue",
+            "evidence",
+            "contract",
+            "runId",
+            "drafts"
+          ],
+          "outKeys": [
+            "finalAnswer",
+            "verdict",
+            "retries"
+          ],
+          "endedAt": 1795854595826
+        }
+      ],
+      "error": ""
+    }
+  ]
+}

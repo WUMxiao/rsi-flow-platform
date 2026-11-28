@@ -4,8 +4,37 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createInterface } from 'node:readline';
 
-import { BASELINE_DIR } from './env.ts';
+import { BASELINE_DIR, ROOT } from './env.ts';
 import type { BaselineRecord } from './types.ts';
+
+/** 仓库内自带的基线记录（32 条，约 11 KB）：没有 BASELINE_DIR 时的回落来源 */
+const BUNDLE_PATH = path.join(ROOT, 'data', 'baseline.jsonl');
+let bundleCache: Map<string, BaselineRecord> | null = null;
+
+function loadBundle(): Map<string, BaselineRecord> {
+  if (bundleCache) return bundleCache;
+  bundleCache = new Map();
+  if (!fs.existsSync(BUNDLE_PATH)) return bundleCache;
+  const text = fs.readFileSync(BUNDLE_PATH, 'utf8');
+  for (const line of text.split('\n')) {
+    if (!line.trim()) continue;
+    const o = JSON.parse(line) as Record<string, unknown>;
+    const rec: BaselineRecord = {
+      task: String(o.task ?? ''),
+      sampleId: String(o.sample_id ?? ''),
+      model: String(o.model ?? ''),
+      raw: String(o.raw ?? ''),
+      score: Number(o.score ?? 0),
+      keepRatio: Number(o.keep_ratio ?? 0),
+      promptTokens: Number(o.prompt_tokens ?? 0),
+      completionTokens: Number(o.completion_tokens ?? 0),
+      latencyS: 0,
+      gold: Array.isArray(o.gold) ? (o.gold as string[]).map(String) : [],
+    };
+    bundleCache.set(`${rec.task}:${rec.sampleId}`, rec);
+  }
+  return bundleCache;
+}
 
 export function baselinePath(task: string): string {
   return path.join(BASELINE_DIR, `${task}.jsonl`);
@@ -15,8 +44,21 @@ export async function loadBaseline(task: string, ids: string[]): Promise<Map<str
   const want = new Set(ids.map((x) => String(x)));
   const found = new Map<string, BaselineRecord>();
 
-  const file = baselinePath(task);
-  if (!fs.existsSync(file)) throw new Error(`基线文件不存在: ${file}`);
+  // 先看仓库内基线包
+  const bundle = loadBundle();
+  for (const id of want) {
+    const hit = bundle.get(`${task}:${id}`);
+    if (hit) found.set(id, hit);
+  }
+  if (found.size === want.size) return found;
+
+  const file = BASELINE_DIR ? baselinePath(task) : '';
+  if (!file || !fs.existsSync(file)) {
+    const missing = [...want].filter((id) => !found.has(id));
+    throw new Error(
+      `取不到基线 ${task} #${missing.join(',')}：BASELINE_DIR ${BASELINE_DIR ? '下没有 ' + file : '未设置'}，仓库内 data/baseline.jsonl 也不含这些 id`,
+    );
+  }
 
   const rl = createInterface({
     input: fs.createReadStream(file, { encoding: 'utf8' }),

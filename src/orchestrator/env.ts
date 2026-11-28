@@ -32,20 +32,28 @@ export const MAX_SHARDS = Number(env.MAX_SHARDS ?? 16);
 export const ISSUES_FILE = path.join(ROOT, 'data', 'issues.jsonl');
 export const RESULTS_DIR = path.join(ROOT, 'public', 'results');
 
-/** 启动前校验必需的目录，报错要能直接指向 .env.local 的哪一行 */
+/** 启动前校验数据源：外部目录与仓库内样本包，二者有其一即可 */
 export function assertEnv(): void {
   const problems: string[] = [];
-  if (!DATA_DIR) problems.push('DATA_DIR 未设置');
-  else if (!fs.existsSync(DATA_DIR)) problems.push(`DATA_DIR 不存在: ${DATA_DIR}`);
+  const ctxBundle = path.join(ROOT, 'data', 'contexts.jsonl.gz');
+  const samplesIndex = path.join(ROOT, 'data', 'samples.jsonl');
+  const baselineBundle = path.join(ROOT, 'data', 'baseline.jsonl');
 
-  if (!BASELINE_DIR) problems.push('BASELINE_DIR 未设置');
-  else if (!fs.existsSync(BASELINE_DIR)) problems.push(`BASELINE_DIR 不存在: ${BASELINE_DIR}`);
+  if (DATA_DIR && !fs.existsSync(DATA_DIR)) problems.push(`DATA_DIR 不存在: ${DATA_DIR}`);
+  if (!DATA_DIR && !(fs.existsSync(ctxBundle) && fs.existsSync(samplesIndex))) {
+    problems.push('DATA_DIR 未设置，且仓库内 data/contexts.jsonl.gz + data/samples.jsonl 不完整');
+  }
+
+  if (BASELINE_DIR && !fs.existsSync(BASELINE_DIR)) problems.push(`BASELINE_DIR 不存在: ${BASELINE_DIR}`);
+  if (!BASELINE_DIR && !fs.existsSync(baselineBundle)) {
+    problems.push('BASELINE_DIR 未设置，且仓库内 data/baseline.jsonl 不存在');
+  }
 
   if (problems.length) {
     throw new Error(
       '环境未就绪：\n  - ' +
         problems.join('\n  - ') +
-        '\n请在 rsi-flow-platform/.env.local 补齐（参考 .env.example）',
+        '\n外部数据可选：不配 DATA_DIR/BASELINE_DIR 时，会回落到仓库内 data/contexts.jsonl.gz 与 data/baseline.jsonl',
     );
   }
 }

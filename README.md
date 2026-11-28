@@ -52,24 +52,26 @@ pnpm dev            # 打开 /orchestration，直接能看到已跑完的 30 条
 pnpm build          # 静态导出到 out/
 ```
 
-页面能看**不需要**任何外部资源。要重跑实验才需要：
+页面能看**不需要**任何外部资源。要重跑实验，只需配模型网关（**数据已随仓库分发**，见下）：
 
 ```bash
-cp .env.example .env.local   # 填 DATA_DIR（InfiniteBench jsonl）、BASELINE_DIR（基线原件）、OPENAI_*
-
-# 不需要模型
-pnpm orchestrate --check-issues          # 三方对账，生成 data/issues.jsonl
-pnpm orchestrate --validate              # 8 条静态规则
-pnpm orchestrate --selftest-validator    # 故意破坏结构，7/7 应被捕获
-pnpm orchestrate --smoke-nest            # 三层空跑，打印 trace
-pnpm orchestrate --smoke-stop            # 跨层 stop 验证
-
-# 需要模型（约 43 次调用 / 5 分钟）
-pnpm orchestrate --all                   # 30 条，4 路并发
-pnpm orchestrate --rescore main30v2      # 只重算判分，0 次调用
-pnpm orchestrate --ablation              # 两层消融
-pnpm orchestrate --autogen-demo          # 让模型生成结构 → L1 校验判死
+cp .env.example .env.local
+# 只填三项：OPENAI_BASE_URL / OPENAI_API_KEY / MODEL=gpt-6-sol
+pnpm orchestrate --all        # 30 条，约 43 次调用 / 5 分钟
 ```
+
+仓库内自带实验所需的数据子集，另一台机器无需下载 2.3 GB 数据集：
+
+| 文件 | 内容 | 体积 |
+|---|---|---|
+| `data/contexts.jsonl.gz` | 28 份唯一 context（按 sha1 存储） | 28.4 MB |
+| `data/samples.jsonl` | 32 条样本索引（含 input / answer / sha1） | 9.6 KB |
+| `data/baseline.jsonl` | 32 条 `gpt-6-sol` v3 基线记录 | 11 KB |
+
+> 数据来源：InfiniteBench（公开数据集）。这里只再分发本实验用到的 30 条样本 + 2 条对照，
+> 便于复现；配了 `DATA_DIR` / `BASELINE_DIR` 时优先用外部完整数据集。
+
+完整步骤、命令速查与排错见 [`docs/RUNBOOK.md`](docs/RUNBOOK.md)。
 
 ## 页面
 
@@ -82,6 +84,7 @@ pnpm orchestrate --autogen-demo          # 让模型生成结构 → L1 校验�
 
 | 文件 | 内容 |
 |---|---|
+| `docs/RUNBOOK.md` | **运行手册**：三种运行模式、命令速查、排错、边界 |
 | `docs/REPORT.md` | **交付报告**：五条目标逐条自检（4 达标 / 1 部分）、口径与局限 |
 | `docs/ISSUES.md` | 30 条问题清单、失败类型、扩容抽样规则（先注册后抽题）、对账差异 |
 | `docs/ORCHESTRATION.md` | 三层结构、数据流、失败上抛、引擎约束、消融、两次改造实验 |
