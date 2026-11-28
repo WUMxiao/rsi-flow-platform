@@ -2,7 +2,7 @@
 
 // 后端运行面板：把 case 发到平台后端（Java 引擎）执行，结果就地展示。
 import { Alert, Button, Card, Input, Select, Space, Table, Tag, Typography } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type CaseDef = {
   id: string;
@@ -33,6 +33,9 @@ export default function BackendRunner({ cases }: { cases: CaseDef[] }) {
   const [rows, setRows] = useState<RunRow[]>([]);
   const [busy, setBusy] = useState(false);
 
+  const byId = useMemo(() => new Map(cases.map((c) => [c.id, c])), [cases]);
+  const autorunRef = useRef(false);
+
   useEffect(() => {
     const saved = window.localStorage.getItem('case-backend');
     if (saved) setBase(saved);
@@ -42,15 +45,20 @@ export default function BackendRunner({ cases }: { cases: CaseDef[] }) {
     window.localStorage.setItem('case-backend', base);
   }, [base]);
 
-  const byId = useMemo(() => new Map(cases.map((c) => [c.id, c])), [cases]);
+  // ?tab=backend&autorun=IB-06：打开页面就自动跑一条（方便演示与截图）
+  useEffect(() => {
+    if (autorunRef.current) return;
+    const id = new URLSearchParams(window.location.search).get('autorun');
+    if (id && byId.has(id)) {
+      autorunRef.current = true;
+      void runOne(id);
+    }
+  }, [byId]);
 
   async function runOne(id: string) {
     const def = byId.get(id);
     if (!def) return;
-    setRows((prev) => {
-      const next = prev.filter((r) => r.id !== id);
-      return [{ id, task: def.task, status: 'running' }, ...next];
-    });
+    setRows((prev) => [{ id, task: def.task, status: 'running' }, ...prev.filter((r) => r.id !== id)]);
     const t0 = Date.now();
     try {
       const res = await fetch(`${base}/facade/engine/flow`, {
@@ -86,7 +94,6 @@ export default function BackendRunner({ cases }: { cases: CaseDef[] }) {
     setBusy(true);
     try {
       for (const c of cases) {
-        // 串行，避免把后端和网关打满
         await runOne(c.id);
       }
     } finally {
@@ -107,7 +114,8 @@ export default function BackendRunner({ cases }: { cases: CaseDef[] }) {
     {
       title: '答案',
       dataIndex: 'answer',
-      render: (v: string, r: RunRow) => (r.error ? <Text type="danger">{r.error.slice(0, 60)}</Text> : <Text>{(v ?? '').slice(0, 40)}</Text>),
+      render: (v: string, r: RunRow) =>
+        r.error ? <Text type="danger">{r.error.slice(0, 60)}</Text> : <Text>{(v ?? '').slice(0, 40)}</Text>,
     },
     {
       title: '严格',

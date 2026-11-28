@@ -61,6 +61,8 @@ node server/run-all-backend.mjs 3
 
 页面：`pnpm dev` → `http://localhost:3000/orchestration` →「后端运行」页签，可单条或全部运行。
 
+![后端运行页签](docs/figures/backend-run.png)
+
 最近一次通过后端的实测：**14/30** 严格匹配、69 次节点调用（`cases/results/summary.md`）。
 
 ## 快速开始（命令行）
@@ -94,10 +96,12 @@ pnpm orchestrate --all        # 30 条，约 43 次调用 / 5 分钟
 
 ## 页面
 
-- `/orchestration`：结构画布 + 30 条结果（含证据与 trace 展开）+ 前后对照 + 复现命令
+- `/orchestration`：结构画布 + 30 条结果（含证据与 trace 展开）+ 前后对照 + **后端运行** + 复现命令
 - `/visual`：已迁移，客户端跳转到 `/orchestration`
 
-页面是**静态导出**（`output: 'export'`），执行在服务端命令行，结果落盘 `public/results/*.json` 后由页面读取——所以没有“运行”按钮，这是有意的取舍。
+页面本身是静态导出（`output: 'export'`），展示的数据来自 `public/results/*.json`；
+「后端运行」页签会直接 `fetch` 本地后端 `127.0.0.1:39910/facade/engine/flow`（跨域由后端 `CorsConfig` 放行），
+所以**只要后端与 worker 起着，页面上就能真的跑 case**；后端没起时该页签会报连接失败，其余页签不受影响。
 
 ## 文档
 
